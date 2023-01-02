@@ -1,17 +1,45 @@
-import { useState, useEffect } from "react"
+import React from 'react'
+import {
+  createBrowserRouter,
+  RouterProvider
+} from 'react-router-dom'
+
+import RootTemplate from './RootTemplate'
+import AboutPage from './routes/AboutPage'
+import LandingPage from './routes/LandingPage'
+import LoginPage from './routes/LoginPage'
+import SignupPage from './routes/SignupPage'
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <RootTemplate />,
+    // errorElement: <div>uh oh</div>,
+    children: [
+      {
+        path: '/',
+        element: <LandingPage />
+      },
+      {
+        path: 'about',
+        element: <AboutPage />
+      },
+      {
+        path: 'login',
+        element: <LoginPage />
+      },
+      {
+        path: 'signup',
+        element: <SignupPage />
+      }
+    ]
+  }
+])
 
 function App () {
-  const [count, setCount] = useState(0)
-
-  useEffect(() => {
-    fetch("/hello")
-      .then((r) => r.json())
-      .then((data) => setCount(data.count))
-  }, []);
-
   return (
-    <div className="App">
-      <h1>Page Count: {count}</h1>
+    <div className='App'>
+      <RouterProvider router={router} />
     </div>
   );
 }

@@ -1,0 +1,59 @@
+import React, { useState } from 'react'
+
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Container from '@mui/material/Container'
+import Stack from '@mui/material/Stack'
+import TextField from '@mui/material/TextField'
+
+const blankLogin = {
+  email: '',
+  password: ''
+}
+
+function LoginPage () {
+  const [login, setLogin] = useState(blankLogin)
+
+  function handleChange (e) {
+    setLogin({
+      ...login,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  function handleSubmit (e) {
+    e.preventDefault()
+  }
+
+  return (
+    <Container maxWidth='xs'>
+      <Box component='form' onSubmit={handleSubmit}>
+        <Stack spacing={2}>
+          <TextField
+            name='email'
+            label='email'
+            fullWidth
+            onChange={handleChange}
+          />
+          <TextField
+            name='password'
+            label='password'
+            type='password'
+            fullWidth
+            onChange={handleChange}
+          />
+          <Box sx={{textAlign: 'center'}}>
+            <Button
+              type='submit'
+              variant='outlined'
+              sx={{minWidth: '40%'}}
+              >login
+            </Button>
+          </Box>
+        </Stack>
+      </Box>
+    </Container>
+  )
+}
+
+export default LoginPage
