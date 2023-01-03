@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :projects
+  resources :patterns
   
   post 'login', to: 'sessions#create'
   post 'logout', to: 'sessions#destroy'
