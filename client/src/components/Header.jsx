@@ -7,7 +7,7 @@ import ButtonGroup from '@mui/material/ButtonGroup'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 
-import PersonIcon from '@mui/icons-material/Person'
+import NavDrawer from './NavDrawer'
 
 // import logo from '../assets/logo512.png'
 
@@ -44,14 +44,10 @@ function Header () {
     )
   }
 
-  const UserBtns = () => {
+  const PageBtns = () => {
     return (
-      <ButtonGroup>
-        <Button sx={{paddingRight: '0.65rem'}}>
-          {!!user ? user.first : 'profile'}
-          &nbsp;
-          <PersonIcon />
-        </Button>
+      <ButtonGroup sx={{marginLeft: '0.5rem'}}>
+        <Button>explore</Button>
       </ButtonGroup>
     )
   }
@@ -70,6 +66,7 @@ function Header () {
               onClick={()=>navigate('about')}
               >about</Button>
           </ButtonGroup>
+          {!!user ? <PageBtns /> : null}
         </Left>
       </Grid>
 
@@ -85,7 +82,7 @@ function Header () {
       {/* right side */}
       <Grid item xs={4}>
         <Right>
-          {!!user ? <UserBtns /> : <LoginBtns />}
+          {!!user ? <NavDrawer /> : <LoginBtns />}
         </Right>
       </Grid>
 

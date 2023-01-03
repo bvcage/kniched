@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -13,6 +14,7 @@ const blankLogin = {
 
 function LoginPage () {
   const [login, setLogin] = useState(blankLogin)
+  const navigate = useNavigate()
 
   function handleChange (e) {
     setLogin({
@@ -30,7 +32,10 @@ function LoginPage () {
       },
       body: JSON.stringify(login)
     }).then(r=>{
-      if (r.ok) r.json().then(user => localStorage.setItem('user', JSON.stringify(user)))
+      if (r.ok) r.json().then(user => {
+        localStorage.setItem('user', JSON.stringify(user))
+        navigate('/')
+      })
       else r.json().then(console.log)
     })
   }
