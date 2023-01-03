@@ -6,7 +6,8 @@ class UsersController < ApplicationController
     if user.nil?
       user = User.create!(user_params)
       Login.create!(user_id: user.id, password: params[:password])
-      user.update(join_date: DateTime.now)
+      username = user.first + user.last[0] + Time.now.to_formatted_s(:number)[4..-1]
+      user.update(join_date: DateTime.current, username: username)
       render json: user, status: :created
     else
       render json: {error: "account already exists for #{user.email}"}, status: :conflict

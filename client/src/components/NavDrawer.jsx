@@ -15,6 +15,7 @@ function NavDrawer () {
   const [open, setOpen] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
+  const user = JSON.parse(localStorage.getItem('user'))
 
   return (
     <React.Fragment>
@@ -63,10 +64,19 @@ function NavDrawer () {
               {/* personal */}
               <List>
                 <ListItem disablePadding>
-                  <ListItemButton>projects</ListItemButton>
+                  <ListItemButton
+                    onClick={()=>navigate(user.username + '/projects')}
+                    >projects
+                  </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
                   <ListItemButton>patterns</ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton
+                    onClick={()=>navigate(user.username)}
+                    >profile
+                  </ListItemButton>
                 </ListItem>
               </List>
 

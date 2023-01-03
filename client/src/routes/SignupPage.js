@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
@@ -29,6 +30,7 @@ function SignupPage () {
   const [info, setInfo] = useState(blankInfo)
   const [errors, setErrors] = useState(noErrors)
   const [alert, showAlert] = useState(false)
+  const navigate = useNavigate()
 
   function handleChangeInfo (e) {
     setInfo({
@@ -53,7 +55,10 @@ function SignupPage () {
       },
       body: JSON.stringify(signup)
     }).then(r=>{
-      if (r.ok) r.json().then(console.log)
+      if (r.ok) r.json().then(user=>{
+        localStorage.setItem('user', JSON.stringify(user))
+        navigate('/')
+      })
       else r.json().then(console.log)
     })
 
