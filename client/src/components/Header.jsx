@@ -7,6 +7,8 @@ import ButtonGroup from '@mui/material/ButtonGroup'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 
+import PersonIcon from '@mui/icons-material/Person'
+
 // import logo from '../assets/logo512.png'
 
 const Left = styled(Paper)(({ theme }) => ({
@@ -25,6 +27,34 @@ const Right = styled(Paper)(({ theme }) => ({
 
 function Header () {
   const navigate = useNavigate()
+  const user = JSON.parse(localStorage.getItem('user'))
+
+  const LoginBtns = () => {
+    return (
+      <ButtonGroup>
+        <Button
+          onClick={()=>navigate('signup')}
+          >sign up
+        </Button>
+        <Button
+          onClick={()=>navigate('login')}
+          >login
+        </Button>
+      </ButtonGroup>
+    )
+  }
+
+  const UserBtns = () => {
+    return (
+      <ButtonGroup>
+        <Button sx={{paddingRight: '0.65rem'}}>
+          {!!user ? user.first : 'profile'}
+          &nbsp;
+          <PersonIcon />
+        </Button>
+      </ButtonGroup>
+    )
+  }
 
   return (
     <Grid container spacing={1}>
@@ -55,16 +85,7 @@ function Header () {
       {/* right side */}
       <Grid item xs={4}>
         <Right>
-          <ButtonGroup>
-            <Button
-              onClick={()=>navigate('signup')}
-              >sign up
-            </Button>
-            <Button
-              onClick={()=>navigate('login')}
-              >login
-            </Button>
-          </ButtonGroup>
+          {!!user ? <UserBtns /> : <LoginBtns />}
         </Right>
       </Grid>
 

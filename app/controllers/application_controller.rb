@@ -1,10 +1,10 @@
 class ApplicationController < ActionController::API
   include ActionController::Cookies
 
-  # testing cookies
-  def hello_world
-    session[:count] = (session[:count] || 0) + 1
-    render json: { count: session[:count] }
+  before_action :authorized
+
+  def authorized
+    return render json: {error: 'not authorized'}, status: :unauthorized unless session.include? :user_id
   end
 
 end

@@ -45,8 +45,18 @@ function SignupPage () {
       return showAlert(true)
     }
     // handle user signup
-    console.log(info)
-    console.log(errors)
+    const signup = {...info, password: info.pass1}
+    fetch('/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(signup)
+    }).then(r=>{
+      if (r.ok) r.json().then(console.log)
+      else r.json().then(console.log)
+    })
+
   }
 
   function setErrorMessage (field, message) {

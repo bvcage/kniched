@@ -23,6 +23,16 @@ function LoginPage () {
 
   function handleSubmit (e) {
     e.preventDefault()
+    fetch('/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(login)
+    }).then(r=>{
+      if (r.ok) r.json().then(user => localStorage.setItem('user', JSON.stringify(user)))
+      else r.json().then(console.log)
+    })
   }
 
   return (
@@ -32,6 +42,7 @@ function LoginPage () {
           <TextField
             name='email'
             label='email'
+            value={login.email}
             fullWidth
             onChange={handleChange}
           />
@@ -39,6 +50,7 @@ function LoginPage () {
             name='password'
             label='password'
             type='password'
+            value={login.password}
             fullWidth
             onChange={handleChange}
           />

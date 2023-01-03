@@ -1,11 +1,7 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
-  # root "articles#index"
-
-  # testing for cookies
-  get '/hello', to: 'application#hello_world'
+  
+  post 'login', to: 'sessions#create'
+  post 'signup', to: 'users#create'
 
   # fallback route
   get '*path',
