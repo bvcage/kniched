@@ -6,6 +6,7 @@ import Button from '@mui/material/Button'
 import ButtonGroup from '@mui/material/ButtonGroup'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
+import Typography from '@mui/material/Typography'
 
 import NavDrawer from './NavDrawer'
 
@@ -75,7 +76,9 @@ function Header () {
         <Center
           onClick={()=>navigate('/')}
           >
-            <h1><em>k</em>niche<em>d</em></h1>
+            <Typography variant='h4'>
+              <em>k</em>niche<em>d</em>
+            </Typography>
         </Center>
       </Grid>
 

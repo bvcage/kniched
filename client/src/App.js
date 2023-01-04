@@ -11,6 +11,7 @@ import LandingPage from './routes/LandingPage'
 import LoginPage from './routes/LoginPage'
 import ProfilePage from './routes/ProfilePage'
 import ProjectsPage from './routes/ProjectsPage'
+import ProjectSummaryPage from './routes/ProjectSummaryPage'
 import SignupPage from './routes/SignupPage'
 
 const router = createBrowserRouter([
@@ -44,7 +45,16 @@ const router = createBrowserRouter([
           },
           {
             path: 'projects',
-            element: <ProjectsPage />
+            children: [
+              {
+                path: '',
+                element: <ProjectsPage />
+              },
+              {
+                path: ':id',
+                element: <ProjectSummaryPage />
+              }
+            ]
           }
         ]
       }

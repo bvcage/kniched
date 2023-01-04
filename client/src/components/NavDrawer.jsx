@@ -8,6 +8,7 @@ import Drawer from '@mui/material/Drawer'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
+import Typography from '@mui/material/Typography'
 
 import MenuIcon from '@mui/icons-material/Menu'
 
@@ -39,7 +40,7 @@ function NavDrawer () {
               <List>
                 <ListItem disablePadding>
                   <Box sx={{textAlign: 'center', margin: 'auto'}}>
-                    <h4>navigation</h4>
+                    <Typography variant='h5'>navigation</Typography>
                   </Box>
                 </ListItem>
               </List>

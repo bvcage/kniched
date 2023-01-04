@@ -1,10 +1,15 @@
 Rails.application.routes.draw do
-  resources :projects
-  resources :patterns
   
   post 'login', to: 'sessions#create'
   post 'logout', to: 'sessions#destroy'
   post 'signup', to: 'users#create'
+
+  # default routes
+  resources :projects, only: [:show]
+  resources :users, only: [:show] do
+    resources :projects, only: [:index]
+  end
+
 
   # fallback route
   get '*path',
