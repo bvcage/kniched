@@ -9,6 +9,8 @@ import RootTemplate from './RootTemplate'
 import AboutPage from './routes/AboutPage'
 import LandingPage from './routes/LandingPage'
 import LoginPage from './routes/LoginPage'
+import PatternsPage from './routes/PatternsPage'
+import PatternSummaryPage from './routes/PatternSummaryPage'
 import ProfilePage from './routes/ProfilePage'
 import ProjectsPage from './routes/ProjectsPage'
 import ProjectSummaryPage from './routes/ProjectSummaryPage'
@@ -37,11 +39,24 @@ const router = createBrowserRouter([
         element: <SignupPage />
       },
       {
+        path: 'patterns',
+        children: [
+          {
+            path: ':id',
+            element: <PatternSummaryPage />
+          }
+        ]
+      },
+      {
         path: ':username',
         children: [
           {
             path: '',
             element: <ProfilePage />
+          },
+          {
+            path: 'patterns',
+            element: <PatternsPage />
           },
           {
             path: 'projects',

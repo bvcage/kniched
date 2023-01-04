@@ -71,7 +71,10 @@ function NavDrawer () {
                   </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
-                  <ListItemButton>patterns</ListItemButton>
+                  <ListItemButton
+                    onClick={()=>navigate(user.username + '/patterns')}
+                    >patterns
+                  </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
                   <ListItemButton

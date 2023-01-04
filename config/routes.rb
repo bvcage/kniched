@@ -5,8 +5,10 @@ Rails.application.routes.draw do
   post 'signup', to: 'users#create'
 
   # default routes
+  resources :patterns, only: [:show]
   resources :projects, only: [:show]
   resources :users, only: [:show] do
+    resources :patterns, only: [:index]
     resources :projects, only: [:index]
   end
 
