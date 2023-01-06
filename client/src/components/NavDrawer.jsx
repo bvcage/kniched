@@ -56,7 +56,10 @@ function NavDrawer () {
                   <ListItemButton>crochet</ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
-                  <ListItemButton>explore</ListItemButton>
+                  <ListItemButton
+                    onClick={()=>navigate('/explore')}
+                    >explore
+                  </ListItemButton>
                 </ListItem>
               </List>
 

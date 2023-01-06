@@ -32,12 +32,23 @@ function PatternSummaryPage () {
         </TableHead>
         <TableBody>
           {Object.entries(pattern).map(([k,v]) => {
-            return (
-              <TableRow>
-                <TableCell>{k}</TableCell>
-                <TableCell>{v}</TableCell>
-              </TableRow>
-            )
+            if (typeof v !== 'object') {
+              return (
+                <TableRow key={k}>
+                  <TableCell>{k}</TableCell>
+                  <TableCell>{v}</TableCell>
+                </TableRow>
+              )
+            } else {
+              return Object.entries(v).map(([k2,v2]) => {
+                return (
+                  <TableRow key={k2}>
+                    <TableCell>{k2}</TableCell>
+                    <TableCell>{v2}</TableCell>
+                  </TableRow>
+                )
+              })
+            }
           })}
         </TableBody>
       </Table>

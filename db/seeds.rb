@@ -26,10 +26,15 @@ puts "done seeding users"
 puts "seeding patterns..."
 
 num_patterns = 10
+craft_choices = ["knitting", "crochet"]
+skill_choices = ["beginner", "intermediate", "experienced"]
 num_patterns.times do
   Pattern.create({
     name: Faker::Artist.name,
-    url: Faker::Internet.domain_name
+    url: Faker::Internet.domain_name,
+    craft: craft_choices.sample,
+    skill_level: skill_choices.sample,
+    owner_id: rand(1..num_users)
   })
 end
 

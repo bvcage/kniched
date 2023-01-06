@@ -34,11 +34,11 @@ function Header () {
     return (
       <ButtonGroup>
         <Button
-          onClick={()=>navigate('signup')}
+          onClick={()=>navigate('/signup')}
           >sign up
         </Button>
         <Button
-          onClick={()=>navigate('login')}
+          onClick={()=>navigate('/login')}
           >login
         </Button>
       </ButtonGroup>
@@ -48,7 +48,10 @@ function Header () {
   const PageBtns = () => {
     return (
       <ButtonGroup sx={{marginLeft: '0.5rem'}}>
-        <Button>explore</Button>
+        <Button
+          onClick={()=>navigate('/explore')}
+          >explore
+        </Button>
       </ButtonGroup>
     )
   }
@@ -64,7 +67,7 @@ function Header () {
               onClick={()=>navigate('/')}
               >home</Button>
             <Button
-              onClick={()=>navigate('about')}
+              onClick={()=>navigate('/about')}
               >about</Button>
           </ButtonGroup>
           {!!user ? <PageBtns /> : null}
