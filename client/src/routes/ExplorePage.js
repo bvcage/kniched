@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Grid } from '@mui/material'
 import PatternCard from '../components/PatternCard'
+import PatternFilter from '../components/PatternFilter'
 
 function ExplorePage () {
   const [order, setOrder] = useState([])
   const [offset, setOffset] = useState(0)
   const [patterns, setPatterns] = useState([])
+  const [filters, setFilters] = useState({})
+  const [appliedFilters, setAppliedFilters] = useState({})
   const numLoad = 4
 
   useEffect(() => {
@@ -16,6 +19,10 @@ function ExplorePage () {
       })
       else r.json().then(console.log)
     })
+    fetch('/patterns/filters').then(r=>{
+      if (r.ok) r.json().then(setFilters)
+      else r.json().then(console.log)
+    })
   }, [])
 
   function loadPatterns (ids) {
@@ -24,7 +31,6 @@ function ExplorePage () {
       ids: ids
     })).then(r=>{
       if (r.ok) r.json().then(fetched => {
-        console.log(fetched)
         setPatterns([...patterns, ...fetched])
         setOffset(offset + numLoad)
       })
@@ -35,16 +41,28 @@ function ExplorePage () {
   if (!patterns[0]) return <></>
   return (
     <Grid container spacing={2}>
-      {patterns.map(pattern => {
-        return (
-          <Grid item
-            key={pattern.id}
-            xs={12} sm={6} md={4} xl={3}
-            >
-              <PatternCard pattern={pattern} />
-          </Grid>
-        )
-      })}
+      <Grid item xs={12}>
+        <PatternFilter filters={filters} appliedFilters={appliedFilters} setAppliedFilters={setAppliedFilters} />
+      </Grid>
+      {patterns
+        .filter(pattern => {
+          const results = Object.entries(appliedFilters).map(([k,v]) => {
+            if (!v[0]) return true
+            return v.indexOf(pattern[k]) > -1
+          })
+          return results.every(Boolean)
+        })
+        .map(pattern => {
+          return (
+            <Grid item
+              key={pattern.id}
+              xs={12} sm={6} md={4} xl={3}
+              >
+                <PatternCard pattern={pattern} />
+            </Grid>
+          )
+        })
+      }
       <Grid item xs={12}>
         <Button
           disabled={offset > order.length}

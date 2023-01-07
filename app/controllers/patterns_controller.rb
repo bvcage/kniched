@@ -21,9 +21,17 @@ class PatternsController < ApplicationController
     render json: pattern, status: :ok
   end
 
+  #################
+  # CUSTOM ROUTES
+
   def explore
     order = Pattern.gen_explore_order
     render json: order, status: :ok
+  end
+
+  def filters
+    filters = Pattern.gen_filters
+    render json: filters, status: :ok
   end
 
 end

@@ -17,5 +17,13 @@ class Pattern < ApplicationRecord
   def self.gen_explore_order
     Pattern.all.pluck(:id).shuffle
   end
+
+  # returns object with filter keys & option values
+  def self.gen_filters
+    {
+      :craft => Pattern.all.pluck(:craft).uniq,
+      :skill_level => Pattern.all.pluck(:skill_level).uniq
+    }
+  end
   
 end

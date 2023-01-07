@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   post 'logout', to: 'sessions#destroy'
   post 'signup', to: 'users#create'
   get 'patterns/explore', to: "patterns#explore"
+  get 'patterns/filters', to: "patterns#filters"
 
   # default routes
   resources :patterns, only: [:index, :show]

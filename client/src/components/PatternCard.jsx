@@ -6,7 +6,7 @@ function PatternCard ({ pattern }) {
   const navigate = useNavigate()
   
   if (!pattern) return null
-  const { id, name, craft } = pattern
+  const { id, name, craft, skill_level } = pattern
 
   return (
     <Card
@@ -15,7 +15,7 @@ function PatternCard ({ pattern }) {
       >
         <CardContent>
           <Typography variant='h5'>{name}</Typography>
-          <Typography variant='subtitle1'>{craft}</Typography>
+          <Typography variant='subtitle2'>{craft} | {skill_level}</Typography>
         </CardContent>
     </Card>
   )
