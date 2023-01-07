@@ -12,6 +12,9 @@ import Typography from '@mui/material/Typography'
 
 import MenuIcon from '@mui/icons-material/Menu'
 
+// typography variant for all buttons
+const buttonFont = 'body1'
+
 function NavDrawer () {
   const [open, setOpen] = useState(false)
   const location = useLocation()
@@ -23,8 +26,16 @@ function NavDrawer () {
       <Button
         variant='outlined'
         onClick={()=>setOpen(true)}
+        sx={{display: {xs: 'none', md: 'inline-flex'}}}
         >
-          <MenuIcon/>&nbsp;navigation
+          <MenuIcon />&nbsp;navigation
+      </Button>
+      <Button
+        variant='outlined'
+        onClick={()=>setOpen(true)}
+        sx={{display: {xs: 'inline-flex', md: 'none'}}}
+        >
+          <MenuIcon />
       </Button>
       <Drawer
         anchor='right'
@@ -34,7 +45,7 @@ function NavDrawer () {
           <Box
             onClick={()=>setOpen(false)}
             onKeyDown={()=>setOpen(false)}
-            sx={{width: 250}}
+            sx={{width: {xs: '65vw', md: 250}}}
             >
               {/* logo */}
               <List>
@@ -47,18 +58,45 @@ function NavDrawer () {
 
               <Divider />
 
-              {/* explore */}
-              <List>
+              {/* home & about, hidden */}
+
+              <List sx={{display: {md: 'none'}}}>
                 <ListItem disablePadding>
-                  <ListItemButton>knitting</ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemButton>crochet</ListItemButton>
+                  <ListItemButton
+                    onClick={()=>navigate('/')}
+                    >
+                      <Typography variant={buttonFont}>home</Typography>
+                  </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
                   <ListItemButton
+                    onClick={()=>navigate('/about')}
+                    >
+                      <Typography variant={buttonFont}>about</Typography>
+                  </ListItemButton>
+                </ListItem>
+
+              </List>
+
+              <Divider sx={{display: {md: 'none'}}} />
+
+              {/* explore */}
+              <List>
+                <ListItem disablePadding>
+                  <ListItemButton
                     onClick={()=>navigate('/explore')}
-                    >explore
+                    >
+                      <Typography variant={buttonFont}>explore</Typography>
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton disabled>
+                    <Typography variant={buttonFont}>knitting</Typography>
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton disabled>
+                    <Typography variant={buttonFont}>crochet</Typography>
                   </ListItemButton>
                 </ListItem>
               </List>
@@ -70,32 +108,42 @@ function NavDrawer () {
                 <ListItem disablePadding>
                   <ListItemButton
                     onClick={()=>navigate(user.username + '/projects')}
-                    >projects
+                    >
+                      <Typography variant={buttonFont}>projects</Typography>
                   </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
                   <ListItemButton
                     onClick={()=>navigate(user.username + '/patterns')}
-                    >patterns
+                    >
+                      <Typography variant={buttonFont}>patterns</Typography>
                   </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
                   <ListItemButton
                     onClick={()=>navigate(user.username)}
-                    >profile
+                    >
+                      <Typography variant={buttonFont}>profile</Typography>
                   </ListItemButton>
                 </ListItem>
               </List>
 
               <Divider />
 
-              {/* logout */}
+              {/* account & logout */}
               <List>
                 <ListItem disablePadding>
-                  <ListItemButton>account</ListItemButton>
+                  <ListItemButton disabled>
+                    <Typography variant={buttonFont}>account</Typography>
+                  </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
                   <ListItemButton
+                    sx={{
+                      ":hover": {
+                        backgroundColor: "#BC6D3880",
+                      }
+                    }}
                     onClick={() => {
                       logoutUser().then(res=>{
                         if (res) {
@@ -105,7 +153,8 @@ function NavDrawer () {
                         else {console.log('res')}
                       })
                     }}
-                    >logout
+                    >
+                      <Typography variant={buttonFont}>logout</Typography>
                   </ListItemButton>
                 </ListItem>
               </List>

@@ -45,16 +45,16 @@ function Header () {
     )
   }
 
-  const PageBtns = () => {
-    return (
-      <ButtonGroup sx={{marginLeft: '0.5rem'}}>
-        <Button
-          onClick={()=>navigate('/explore')}
-          >explore
-        </Button>
-      </ButtonGroup>
-    )
-  }
+  // const PageBtns = () => {
+  //   return (
+  //     <ButtonGroup sx={{marginLeft: '0.5rem', display: {xs: 'none', md: 'inline'}}}>
+  //       <Button
+  //         onClick={()=>navigate('/explore')}
+  //         >explore
+  //       </Button>
+  //     </ButtonGroup>
+  //   )
+  // }
 
   return (
     <Grid container spacing={1}>
@@ -62,7 +62,7 @@ function Header () {
       {/* left side */}
       <Grid item xs={4}>
         <Left>
-          <ButtonGroup>
+          <ButtonGroup sx={{display: {xs: 'none', md: 'inline'}}}>
             <Button
               onClick={()=>navigate('/')}
               >home</Button>
@@ -70,15 +70,13 @@ function Header () {
               onClick={()=>navigate('/about')}
               >about</Button>
           </ButtonGroup>
-          {!!user ? <PageBtns /> : null}
+          {/* {!!user ? <PageBtns /> : null} */}
         </Left>
       </Grid>
 
       {/* center */}
       <Grid item xs={4}>
-        <Center
-          onClick={()=>navigate('/')}
-          >
+        <Center>
             <Typography variant='h4'>
               <em>k</em>niche<em>d</em>
             </Typography>

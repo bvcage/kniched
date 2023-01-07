@@ -45,6 +45,7 @@ function PatternFilter (props) {
           <React.Fragment key={k}>
             <Button
               id={k+'-filter'}
+              key={k+'-filter'}
               aria-controls={open===k+'-filter' ? k+'-menu' : undefined}
               aria-haspopup='true'
               aria-expanded={open===k+'-filter' ? 'true' : undefined}
@@ -53,6 +54,7 @@ function PatternFilter (props) {
             </Button>
             <Menu
               id={k+'-menu'}
+              key={k+'-menu'}
               anchorEl={anchor}
               anchorOrigin={{
                 vertical: 'bottom',
@@ -68,6 +70,7 @@ function PatternFilter (props) {
                 {v.map(option => {
                   return (
                     <MenuItem
+                      key={option+'-menu-option'}
                       onClick={(e) => handleFilterClick(e, k, option)}
                       >
                         {appliedFilters[k] && appliedFilters[k].indexOf(option) > -1
