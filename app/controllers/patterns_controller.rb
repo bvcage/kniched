@@ -34,4 +34,10 @@ class PatternsController < ApplicationController
     render json: filters, status: :ok
   end
 
+  def diagram
+    pattern = Pattern.find(params[:pattern_id])
+    diagram = pattern.gen_diagram
+    render json: diagram, include: [:stitch], status: :ok
+  end
+
 end

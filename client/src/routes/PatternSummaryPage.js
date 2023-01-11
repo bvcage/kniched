@@ -1,6 +1,8 @@
 import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import CreateProjectBtn from '../components/CreateProjectBtn'
+import PatternDiagram from '../components/PatternDiagram'
 
 function PatternSummaryPage () {
   const location = useLocation()
@@ -15,10 +17,11 @@ function PatternSummaryPage () {
     })
   }, [id])
 
-  if (!pattern) return <></>
+  if (!pattern || !pattern.id) return <></>
   return (
     <div>
       <Typography variant='h3'>pattern summary: {pattern.name}</Typography>
+      <CreateProjectBtn pattern={pattern} />
       <Button
         onClick={()=>navigate(-1)}
         >back
@@ -44,7 +47,7 @@ function PatternSummaryPage () {
                 return (
                   <TableRow key={k2}>
                     <TableCell>{k2}</TableCell>
-                    <TableCell>{v2}</TableCell>
+                    <TableCell>{v2.toString()}</TableCell>
                   </TableRow>
                 )
               })
@@ -52,6 +55,7 @@ function PatternSummaryPage () {
           })}
         </TableBody>
       </Table>
+      <PatternDiagram id={id} />
     </div>
   )
 }
