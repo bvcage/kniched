@@ -1,4 +1,14 @@
 
+puts "seeding craft categories..."
+
+CRAFTS = ["knitting", "crochet"]
+CRAFTS.each do |craft|
+  Craft.create!(name: craft)
+end
+
+puts "done seeding craft categories"
+
+
 puts "seeding users..."
 
 num_users = 5
@@ -26,13 +36,12 @@ puts "done seeding users"
 puts "seeding patterns..."
 
 num_patterns = 10
-craft_choices = ["knitting", "crochet"]
 skill_choices = ["beginner", "intermediate", "experienced"]
 num_patterns.times do
   Pattern.create({
     name: Faker::Artist.name,
     url: Faker::Internet.domain_name,
-    craft: craft_choices.sample,
+    craft_id: rand(1..CRAFTS.length),
     skill_level: skill_choices.sample,
     owner_id: rand(1..num_users)
   })
@@ -56,6 +65,80 @@ ITEMS = %w(scarf hat sweater socks)
 end
 
 puts "done seeding projects"
+
+
+puts "seeding stitches..."
+
+knit = Stitch.create({
+  name: "knit",
+  shorthand: "k",
+  num_loop_in: 1,
+  num_loop_out: 1,
+  symbol: " ",
+  craft_id: Craft.find_by!(name: "knitting").id
+})
+purl = Stitch.create({
+  name: "purl",
+  shorthand: "p",
+  num_loop_in: 1,
+  num_loop_out: 1,
+  symbol: "|",
+  craft_id: Craft.find_by!(name: "knitting").id
+})
+
+puts "done seeding stitches"
+
+
+puts "seeding diagrams..."
+
+knitting = Craft.find_by(name: "knitting")
+knitting_patterns = Pattern.where(craft_id: knitting.id)
+knitting_patterns.each do |pattern|
+  col = 1
+  num_rib = rand(1..3)
+  num_rib.times do
+    Diagram.create({
+      pattern_id: pattern.id,
+      stitch_id: knit.id,
+      row_num: 1,
+      col_num_start: col,
+      col_num_end: col
+    })
+    col += 1
+  end
+  num_rib.times do
+    Diagram.create({
+      pattern_id: pattern.id,
+      stitch_id: purl.id,
+      row_num: 1,
+      col_num_start: col,
+      col_num_end: col
+    })
+    col += 1
+  end
+  num_rib.times do
+    Diagram.create({
+      pattern_id: pattern.id,
+      stitch_id: purl.id,
+      row_num: 2,
+      col_num_start: col,
+      col_num_end: col
+    })
+    col += 1
+  end
+  num_rib.times do
+    Diagram.create({
+      pattern_id: pattern.id,
+      stitch_id: knit.id,
+      row_num: 2,
+      col_num_start: col,
+      col_num_end: col
+    })
+    col += 1
+  end
+end
+
+puts "done seeding diagrams"
 
 
 puts "done seeding data!"

@@ -10,9 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_06_192702) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_09_032839) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "crafts", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "diagrams", force: :cascade do |t|
+    t.integer "pattern_id"
+    t.integer "stitch_id"
+    t.integer "row_num"
+    t.integer "col_num_start"
+    t.integer "col_num_end"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "logins", force: :cascade do |t|
     t.integer "user_id"
@@ -26,9 +42,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_06_192702) do
     t.string "url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "craft"
     t.string "skill_level"
     t.integer "owner_id"
+    t.bigint "craft_id"
+    t.index ["craft_id"], name: "index_patterns_on_craft_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -41,6 +58,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_06_192702) do
     t.interval "time_spent"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "stitches", force: :cascade do |t|
+    t.string "name"
+    t.string "shorthand"
+    t.integer "num_loop_in"
+    t.integer "num_loop_out"
+    t.string "symbol"
+    t.string "img"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "craft_id"
+    t.index ["craft_id"], name: "index_stitches_on_craft_id"
   end
 
   create_table "users", force: :cascade do |t|
