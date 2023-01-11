@@ -7,11 +7,13 @@ Rails.application.routes.draw do
   get 'patterns/filters', to: "patterns#filters"
 
   # default routes
-  resources :patterns, only: [:index, :show]
+  resources :patterns, only: [:index, :show] do
+    get "/diagram", to: "patterns#diagram"
+  end
   resources :projects, only: [:show]
   resources :users, only: [:show] do
     resources :patterns, only: [:index]
-    resources :projects, only: [:index]
+    resources :projects, only: [:index, :create]
   end
 
 

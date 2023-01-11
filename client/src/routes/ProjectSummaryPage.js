@@ -20,8 +20,8 @@ function ProjectSummaryPage () {
     <React.Fragment>
       <Typography variant='h3'>{project.name}</Typography>
       <Button
-        onClick={()=>navigate(-1)}
-        >back to projects
+        onClick={()=>navigate('..')}
+        >all projects
       </Button>
       <Table>
         <TableHead>

@@ -14,4 +14,16 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def create
+    pp params
+    project = Project.create!({
+      name: params[:name],
+      start_date: params[:start],
+      end_date: params[:end],
+      pattern_id: params[:pattern_id],
+      user_id: params[:user_id]
+    })
+    render json: project, status: :created
+  end
+
 end
