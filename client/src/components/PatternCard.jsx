@@ -6,6 +6,7 @@ function PatternCard ({ pattern }) {
   const navigate = useNavigate()
   
   if (!pattern) return null
+  console.log(pattern)
   const { id, name, craft, skill_level } = pattern
 
   return (

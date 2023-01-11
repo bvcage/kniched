@@ -63,7 +63,7 @@ function ExplorePage () {
           )
         })
       }
-      <Grid item xs={12}>
+      <Grid item xs={12} sx={{textAlign: 'center'}}>
         <Button
           disabled={offset > order.length}
           onClick={() => loadPatterns(order.slice(offset, offset + numLoad))}
