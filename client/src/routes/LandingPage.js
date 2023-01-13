@@ -1,4 +1,5 @@
 import React from 'react'
+import Typography from '@mui/material/Typography'
 
 function LandingPage () {
   const user = JSON.parse(localStorage.getItem('user'))
@@ -10,8 +11,10 @@ function LandingPage () {
 }
 
 const NoUser = () => {return (<>
-  <h2>welcome to kniched</h2>
-  <p>join to track your projects and share your patterns!</p>
+  <br/>
+  <Typography variant='h2'>welcome to kniched</Typography>
+  <br/>
+  <Typography variant='body1'>join to track your projects and share your patterns!</Typography>
 </>)}
 
 export default LandingPage

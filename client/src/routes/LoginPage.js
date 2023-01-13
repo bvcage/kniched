@@ -41,7 +41,7 @@ function LoginPage () {
   }
 
   return (
-    <Container maxWidth='xs'>
+    <Container maxWidth='xs' sx={{padding: '1rem'}}>
       <Box component='form' onSubmit={handleSubmit}>
         <Stack spacing={2}>
           <TextField

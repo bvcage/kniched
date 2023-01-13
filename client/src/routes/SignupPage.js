@@ -126,7 +126,7 @@ function SignupPage () {
   }
 
   return (
-    <Container maxWidth='sm'>
+    <Container maxWidth='sm' sx={{padding: '1rem'}}>
       <Box component='form' onSubmit={handleSubmit}>
         <Grid container spacing={2}>
 
