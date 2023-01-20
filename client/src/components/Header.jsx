@@ -57,7 +57,7 @@ function Header () {
   // }
 
   return (
-    <Grid container spacing={1}>
+    <Grid container fluid sx={{borderBottom: 1}}>
 
       {/* left side */}
       <Grid item xs={4}>

@@ -6,12 +6,12 @@ import Header from './components/Header'
 
 function RootTemplate () {
   return (
-    <div>
+    <React.Fragment>
       <Header />
       <Container>
         <Outlet />
       </Container>
-    </div>
+    </React.Fragment>
   )
 }
 

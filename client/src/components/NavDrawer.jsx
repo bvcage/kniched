@@ -109,21 +109,21 @@ function NavDrawer () {
                   <ListItemButton
                     onClick={()=>navigate(user.username + '/projects')}
                     >
-                      <Typography variant={buttonFont}>projects</Typography>
+                      <Typography variant={buttonFont}>my projects</Typography>
                   </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
                   <ListItemButton
                     onClick={()=>navigate(user.username + '/patterns')}
                     >
-                      <Typography variant={buttonFont}>patterns</Typography>
+                      <Typography variant={buttonFont}>my patterns</Typography>
                   </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
                   <ListItemButton
                     onClick={()=>navigate(user.username)}
                     >
-                      <Typography variant={buttonFont}>profile</Typography>
+                      <Typography variant={buttonFont}>my profile</Typography>
                   </ListItemButton>
                 </ListItem>
               </List>
