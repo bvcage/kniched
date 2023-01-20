@@ -2,6 +2,7 @@ import { Button, Container, Table, TableBody, TableCell, TableHead, TableRow, Ty
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Timer from '../components/Timer'
+import TimerTable from '../components/TimerTable'
 
 function ProjectSummaryPage () {
   const [project, setProject] = useState({})
@@ -27,6 +28,7 @@ function ProjectSummaryPage () {
       <Container>
         <Timer />
       </Container>
+      <TimerTable projectId={project.id} />
       <Table>
         <TableHead>
           <TableRow>

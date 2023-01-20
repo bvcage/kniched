@@ -59,8 +59,8 @@ function Timer (props) {
   }
 
   return (
-    <Box>
-      <Typography variant='h6'>{formatTimer(timer)}</Typography>
+    <Box sx={{margin: 'auto', width: 'fit-content'}}>
+      <Typography variant='h6' sx={{textAlign: 'center'}}>{formatTimer(timer)}</Typography>
       <Button
         onClick={startTimer}
         disabled={isRunning}
@@ -82,7 +82,7 @@ function Timer (props) {
   )
 }
 
-function formatTimer (numSeconds, forceAll) {
+export function formatTimer (numSeconds, forceAll) {
   const time = new Date(numSeconds * 1000)
   const days = time.getUTCDate() - 1
   const hours = time.getUTCHours()
