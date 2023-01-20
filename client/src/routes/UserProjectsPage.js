@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography'
 
 const STATUS = ['', 'to-do', 'in progress', 'complete']
 
-function ProjectsPage () {
+function UserProjectsPage () {
   const user = JSON.parse(localStorage.getItem('user'))
   const [projects, setProjects] = useState([])
   const navigate = useNavigate()
@@ -49,4 +49,4 @@ function ProjectsPage () {
   )
 }
 
-export default ProjectsPage
+export default UserProjectsPage

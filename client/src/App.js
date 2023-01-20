@@ -1,7 +1,6 @@
 import React from 'react'
 import {
   createBrowserRouter,
-  Outlet,
   RouterProvider
 } from 'react-router-dom'
 
@@ -10,12 +9,12 @@ import AboutPage from './routes/AboutPage'
 import ExplorePage from './routes/ExplorePage'
 import LandingPage from './routes/LandingPage'
 import LoginPage from './routes/LoginPage'
-import PatternsPage from './routes/PatternsPage'
 import PatternSummaryPage from './routes/PatternSummaryPage'
 import ProfilePage from './routes/ProfilePage'
-import ProjectsPage from './routes/ProjectsPage'
 import ProjectSummaryPage from './routes/ProjectSummaryPage'
 import SignupPage from './routes/SignupPage'
+import UserPatternsPage from './routes/UserPatternsPage'
+import UserProjectsPage from './routes/UserProjectsPage'
 
 const router = createBrowserRouter([
   {
@@ -61,14 +60,14 @@ const router = createBrowserRouter([
           },
           {
             path: 'patterns',
-            element: <PatternsPage />
+            element: <UserPatternsPage />
           },
           {
             path: 'projects',
             children: [
               {
                 path: '',
-                element: <ProjectsPage />
+                element: <UserProjectsPage />
               },
               {
                 path: ':id',
