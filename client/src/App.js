@@ -10,7 +10,7 @@ import ExplorePage from './routes/ExplorePage'
 import LandingPage from './routes/LandingPage'
 import LoginPage from './routes/LoginPage'
 import PatternSummaryPage from './routes/PatternSummaryPage'
-import ProfilePage from './routes/ProfilePage'
+import UserProfilePage from './routes/UserProfilePage'
 import ProjectSummaryPage from './routes/ProjectSummaryPage'
 import SignupPage from './routes/SignupPage'
 import UserPatternsPage from './routes/UserPatternsPage'
@@ -56,7 +56,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: '',
-            element: <ProfilePage />
+            element: <UserProfilePage />
           },
           {
             path: 'patterns',
