@@ -1,6 +1,7 @@
-import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
+import { Button, Container, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import Timer from '../components/Timer'
 
 function ProjectSummaryPage () {
   const [project, setProject] = useState({})
@@ -23,6 +24,9 @@ function ProjectSummaryPage () {
         onClick={()=>navigate('..')}
         >all projects
       </Button>
+      <Container>
+        <Timer />
+      </Container>
       <Table>
         <TableHead>
           <TableRow>
