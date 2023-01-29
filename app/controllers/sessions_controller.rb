@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
 
   def destroy
     user = User.find_by!(email: params[:email])
-    # session.delete(user.id)
+    session.delete(user.id)
     head :no_content
   end
 

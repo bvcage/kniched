@@ -5,6 +5,12 @@ class TimersController < ApplicationController
     render json: timer, status: :created
   end
 
+  def destroy
+    timer = Timer.find(params[:id])
+    Timer.destroy(timer.id)
+    head :no_content
+  end
+
   def index
     if (params[:project_id])
       project = Project.find(params[:project_id])

@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   resources :projects, only: [:show] do
     resources :timers, only: [:index]
   end
-  resources :timers, only: [:create]
+  resources :timers, only: [:create, :destroy]
   resources :users, only: [:show] do
     resources :patterns, only: [:index]
     resources :projects, only: [:index, :create]

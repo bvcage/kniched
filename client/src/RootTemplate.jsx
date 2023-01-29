@@ -8,7 +8,7 @@ function RootTemplate () {
   return (
     <React.Fragment>
       <Header />
-      <Container>
+      <Container sx={{paddingTop: '1rem'}}>
         <Outlet />
       </Container>
     </React.Fragment>
