@@ -2,7 +2,12 @@ class ProjectsController < ApplicationController
 
   def index
     user = User.find(params[:user_id])
-    render json: user.projects, status: :ok
+    projects = user.projects
+    if params[:status]
+      status = params[:status].to_i
+      projects = projects.filter{|proj| proj.status == status}
+    end
+    render json: projects, status: :ok
   end
 
   def show

@@ -1,11 +1,12 @@
 import React from 'react'
 import Typography from '@mui/material/Typography'
+import UserDashboard from './UserDashboard'
 
 function LandingPage () {
   const user = JSON.parse(localStorage.getItem('user'))
   return (
     <div>
-      {!!user ? 'dashboard' : <NoUser />}
+      {!!user ? <UserDashboard /> : <NoUser />}
     </div>
   )
 }
