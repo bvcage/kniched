@@ -18,6 +18,7 @@ function PatternSummaryPage () {
   }, [id])
 
   if (!pattern || !pattern.id) return <></>
+  console.log(pattern)
   return (
     <div>
       <Typography variant='h3'>pattern summary: {pattern.name}</Typography>
@@ -35,11 +36,12 @@ function PatternSummaryPage () {
         </TableHead>
         <TableBody>
           {Object.entries(pattern).map(([k,v]) => {
+            v = !!v ? v : ''
             if (typeof v !== 'object') {
               return (
                 <TableRow key={k}>
                   <TableCell>{k}</TableCell>
-                  <TableCell>{v}</TableCell>
+                  <TableCell>{v ? v : ''}</TableCell>
                 </TableRow>
               )
             } else {
@@ -55,7 +57,7 @@ function PatternSummaryPage () {
           })}
         </TableBody>
       </Table>
-      <PatternDiagram id={id} />
+      {/* <PatternDiagram id={id} /> */}
     </div>
   )
 }

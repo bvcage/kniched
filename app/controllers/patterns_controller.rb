@@ -21,6 +21,11 @@ class PatternsController < ApplicationController
     render json: pattern, status: :ok
   end
 
+  def create
+    pattern = Pattern.create!(pattern_params)
+    render json: pattern, status: :created
+  end
+
   #################
   # CUSTOM ROUTES
 
@@ -38,6 +43,16 @@ class PatternsController < ApplicationController
     pattern = Pattern.find(params[:pattern_id])
     diagram = pattern.gen_diagram
     render json: diagram, include: [:stitch], status: :ok
+  end
+
+  private
+
+  def pattern_params
+    params.permit(
+      :name,
+      :craft_id,
+      :owner_id
+    )
   end
 
 end

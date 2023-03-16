@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, Card, CardContent, Grid, Typography } from '@mui/material'
 import PatternFilter from '../components/PatternFilter'
+import CreatePatternBtn from '../components/CreatePatternBtn'
 
 function UserPatternsPage () {
   const user = JSON.parse(localStorage.getItem('user'))
@@ -19,7 +20,7 @@ function UserPatternsPage () {
   return (
     <div>
       <Typography variant='h2'>my patterns</Typography>
-      <Button>+ new</Button>
+      <CreatePatternBtn />
       <Grid container spacing={2}>
         <Grid item xs={12}>
           {/* <PatternFilter filters={} appliedFilters={} setAppliedFilters={} /> */}

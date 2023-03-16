@@ -7,7 +7,8 @@ Rails.application.routes.draw do
   get 'patterns/filters', to: "patterns#filters"
 
   # default routes
-  resources :patterns, only: [:index, :show] do
+  resources :crafts, only: [:index]
+  resources :patterns, only: [:index, :show, :create] do
     get "/diagram", to: "patterns#diagram"
   end
   resources :projects, only: [:show] do
