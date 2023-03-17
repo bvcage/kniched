@@ -1,14 +1,16 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { styled } from '@mui/material/styles'
 import Button from '@mui/material/Button'
 import ButtonGroup from '@mui/material/ButtonGroup'
 import Grid from '@mui/material/Grid'
+import Link from '@mui/material/Link'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 
 import NavDrawer from './NavDrawer'
+import { Breadcrumbs } from '@mui/material'
 
 // import logo from '../assets/logo512.png'
 
@@ -28,7 +30,21 @@ const Right = styled(Paper)(({ theme }) => ({
 
 function Header () {
   const navigate = useNavigate()
+  const location = useLocation()
   const user = JSON.parse(localStorage.getItem('user'))
+
+  const BreadcrumbBar = () => {
+    return (
+      <Breadcrumbs>
+        {location.pathname.split('/').map((loc, i, ary) => {
+          console.log(ary.slice(0,i+1).join('/'))
+          return (
+            <Link underline='hover' href={ary.slice(0,i+1).join('/')}>{loc}</Link>
+          )
+        })}
+      </Breadcrumbs>
+    )
+  }
 
   const LoginBtns = () => {
     return (
@@ -88,6 +104,10 @@ function Header () {
         <Right>
           {!!user ? <NavDrawer /> : <LoginBtns />}
         </Right>
+      </Grid>
+
+      <Grid item xs={12}>
+        {location.pathname ? <BreadcrumbBar/> : null}
       </Grid>
 
     </Grid>
