@@ -1,8 +1,9 @@
-import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
+import { Button, Grid, Stack, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import CreateProjectBtn from '../components/CreateProjectBtn'
 import PatternDiagram from '../components/PatternDiagram'
+import PatternMetaTable from '../components/PatternMetaTable'
 
 function PatternSummaryPage () {
   const location = useLocation()
@@ -18,45 +19,28 @@ function PatternSummaryPage () {
   }, [id])
 
   if (!pattern || !pattern.id) return <></>
-  console.log(pattern)
   return (
     <div>
-      <Typography variant='h3'>pattern summary: {pattern.name}</Typography>
-      <CreateProjectBtn pattern={pattern} />
-      <Button
-        onClick={()=>navigate(-1)}
-        >back
-      </Button>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>attribute</TableCell>
-            <TableCell>value</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {Object.entries(pattern).map(([k,v]) => {
-            v = !!v ? v : ''
-            if (typeof v !== 'object') {
-              return (
-                <TableRow key={k}>
-                  <TableCell>{k}</TableCell>
-                  <TableCell>{v ? v : ''}</TableCell>
-                </TableRow>
-              )
-            } else {
-              return Object.entries(v).map(([k2,v2]) => {
-                return (
-                  <TableRow key={k2}>
-                    <TableCell>{k2}</TableCell>
-                    <TableCell>{v2.toString()}</TableCell>
-                  </TableRow>
-                )
-              })
-            }
-          })}
-        </TableBody>
-      </Table>
+      <Grid container spacing={1}>
+        <Grid item xs={12}>
+          <Typography variant='h5'>Pattern Summary</Typography>
+          <Typography variant='h3'>{pattern.name}</Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <CreateProjectBtn pattern={pattern} />
+          <Button
+            onClick={()=>navigate(-1)}
+            >back
+          </Button>
+        </Grid>
+        <Grid item xs={6}>
+          <Typography variant='h6'>information</Typography>
+          <PatternMetaTable pattern={pattern} />
+        </Grid>
+        <Grid item xs={6}>
+          [INSERT PATTERN STATISTICS]
+        </Grid>
+      </Grid>
       {/* <PatternDiagram id={id} /> */}
     </div>
   )
