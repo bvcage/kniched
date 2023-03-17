@@ -41,7 +41,7 @@ function CreateProjectBtn (props) {
     handleClose()
     const newProject = {
       ...project,
-      'pattern_id': pattern.id,
+      'pattern_id': !!pattern ? pattern.id : null,
     }
     fetch('/users/'+user.id+'/projects', {
       method: 'POST',
@@ -79,11 +79,15 @@ function CreateProjectBtn (props) {
                   value={project.name}
                   onChange={handleChange}
                 />
-                <TextField
-                  label='pattern'
-                  value={pattern.name}
-                  disabled
-                />
+                {
+                  !!pattern
+                  ? <TextField
+                      label='pattern'
+                      value={pattern.name}
+                      disabled
+                    />
+                  : null
+                }
                 <Grid container>
                   <Grid item xs={12} sm={6} sx={{textAlign: 'center'}}>
                     <Typography variant='body1'>start by</Typography>

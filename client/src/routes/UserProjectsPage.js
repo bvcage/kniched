@@ -6,6 +6,8 @@ import CardContent from '@mui/material/CardContent'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 
+import CreateProjectBtn from '../components/CreateProjectBtn'
+
 const STATUS = ['', 'to-do', 'in progress', 'complete']
 
 function UserProjectsPage () {
@@ -42,6 +44,7 @@ function UserProjectsPage () {
   return (
     <div>
       <Typography variant='h3'>projects</Typography>
+      <CreateProjectBtn />
       <Grid container spacing={3}>
         {ProjectCards}
       </Grid>

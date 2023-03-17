@@ -26,8 +26,13 @@ class ProjectsController < ApplicationController
       start_date: params[:start],
       end_date: params[:end],
       pattern_id: params[:pattern_id],
-      user_id: params[:user_id]
+      user_id: params[:user_id],
     })
+    if (project.start_date <= Date.today)
+      project.update(status: 2)
+    else
+      project.update(status: 1)
+    end
     render json: project, status: :created
   end
 
