@@ -1,11 +1,12 @@
 import { Box, IconButton, Popover, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import DeleteIcon from '@mui/icons-material/Delete'
+import EditIcon from '@mui/icons-material/Edit'
 import React, { useEffect, useState } from 'react'
 import { formatTimer } from './Timer'
 
 function TimerTable (props) {
-  const { timers, deleteTimer } = props
+  const { timers, deleteTimer, editTimer } = props
   const [anchorEl, setAnchorEl] = useState(null)
 
   function removeTimer (timerId) {
@@ -14,6 +15,11 @@ function TimerTable (props) {
 
   function handleClosePopover () {
     setAnchorEl(null)
+  }
+
+  function openEditModal (timerId) {
+    editTimer(timerId)
+    handleClosePopover()
   }
 
   const tableRows = !!timers[0]
@@ -25,7 +31,7 @@ function TimerTable (props) {
             <TableCell align='right'>{formatTimer(timer.duration)}</TableCell>
             <TableCell sx={{padding: 0, margin: 0}}>
               <IconButton aria-label='delete' size='small' name={timer.id} onClick={(e)=>setAnchorEl(e.currentTarget)}>
-                <DeleteIcon fontSize='inherit'/>
+                <EditIcon fontSize='inherit' />
               </IconButton>
             </TableCell>
           </TableRow>
@@ -70,6 +76,12 @@ function TimerTable (props) {
                   >
                     <CloseIcon fontSize='inherit' />
                 </IconButton>
+                <IconButton
+                  size='small'
+                  onClick={(e)=>openEditModal(anchorEl.name)}
+                  >
+                    <EditIcon fontSize='inherit' />
+                  </IconButton>
                 <IconButton
                   size='small'
                   onClick={(e)=>removeTimer(anchorEl.name)}

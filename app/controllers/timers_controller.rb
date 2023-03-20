@@ -21,6 +21,12 @@ class TimersController < ApplicationController
     render json: timers, status: :ok
   end
 
+  def update
+    timer = Timer.find(params[:id])
+    timer.update!(duration: params[:duration])
+    render json: timer, status: :accepted
+  end
+
   private
 
   def timer_params

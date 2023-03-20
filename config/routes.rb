@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     resources :timers, only: [:index]
   end
   resources :statuses, only: [:index]
-  resources :timers, only: [:create, :destroy]
+  resources :timers, only: [:create, :destroy, :update]
   resources :users, only: [:show] do
     resources :patterns, only: [:index]
     resources :projects, only: [:index, :create]
