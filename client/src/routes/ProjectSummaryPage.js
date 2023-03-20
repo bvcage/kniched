@@ -1,6 +1,7 @@
-import { Button, Container, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
+import { Button, Container, Grid, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import ProjectMetaTable from '../components/ProjectMetaTable'
 import Timer from '../components/Timer'
 import TimerTable from '../components/TimerTable'
 
@@ -20,33 +21,25 @@ function ProjectSummaryPage () {
   if (!project.id) return <></>
   return (
     <React.Fragment>
-      <Typography variant='h3'>{project.name}</Typography>
-      <Button
-        onClick={()=>navigate('..')}
-        >all projects
-      </Button>
-      <Container>
-        <Timer />
-      </Container>
-      <TimerTable projectId={project.id} />
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>attribute</TableCell>
-            <TableCell>value</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {Object.entries(project).map(([k,v]) => {
-            return (
-              <TableRow key={k}>
-                <TableCell>{k}</TableCell>
-                <TableCell>{v}</TableCell>
-              </TableRow>
-            )
-          })}
-        </TableBody>
-      </Table>
+      <Grid container spacing={1}>
+        <Grid item xs={12}>
+          <Typography variant='h3'>{project.name}</Typography>
+          <Button
+            onClick={()=>navigate('..')}
+            >{'< all projects'}
+          </Button>
+        </Grid>
+        <Grid item xs={6}>
+          <Typography variant='h6'>information</Typography>
+          <ProjectMetaTable project={project} />
+        </Grid>
+        <Grid item xs={6}>
+          <Container>
+            <Timer />
+          </Container>
+          <TimerTable projectId={project.id} />
+        </Grid>
+      </Grid>
     </React.Fragment>
   )
 }

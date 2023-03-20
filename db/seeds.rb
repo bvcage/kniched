@@ -9,6 +9,22 @@ end
 puts "done seeding craft categories"
 
 
+puts "seeding statuses..."
+
+STATUSES = [
+  [100, "to-do"],
+  [200, "in progress"],
+  [300, "complete"],
+  [400, "on hold"]
+]
+STATUSES.each do |status|
+  Status.create!(code: status[0], name: status[1])
+end
+
+
+puts "done seeding statuses"
+
+
 puts "seeding users..."
 
 num_users = 5

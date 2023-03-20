@@ -13,6 +13,7 @@ const STATUS = ['', 'to-do', 'in progress', 'complete']
 function UserProjectsPage () {
   const user = JSON.parse(localStorage.getItem('user'))
   const [projects, setProjects] = useState([])
+  const [statusList, setStatusList] = useState([])
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -22,9 +23,13 @@ function UserProjectsPage () {
         else r.json().then(console.log)
       })
     }
+    fetch('/statuses').then(r=>{
+      if (r.ok) r.json().then(setStatusList)
+    })
   }, [])
 
   const ProjectCards = !!projects ? projects.map(project => {
+    const status = !!project.status ? statusList[project.status] : statusList.find(s => s.code === 999)
     return (
       <Grid item
         key={project.id}
@@ -35,7 +40,7 @@ function UserProjectsPage () {
             >
               <CardContent>
                 <Typography variant='h6'>{project.name}</Typography>
-                <Typography variant='subtitle1'>{STATUS[project.status]}</Typography>
+                <Typography variant='subtitle1'>{status.title}</Typography>
               </CardContent>
           </Card>
       </Grid>

@@ -37,7 +37,6 @@ function Header () {
     return (
       <Breadcrumbs>
         {location.pathname.split('/').map((loc, i, ary) => {
-          console.log(ary.slice(0,i+1).join('/'))
           return (
             <Link underline='hover' href={ary.slice(0,i+1).join('/')}>{loc}</Link>
           )

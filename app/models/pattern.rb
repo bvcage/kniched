@@ -3,6 +3,7 @@ class Pattern < ApplicationRecord
   has_many :users, through: :projects
   has_many :diagrams
   belongs_to :craft
+  belongs_to :status
 
   def owner_info
     owner = User.find_by(id: self.owner_id)
