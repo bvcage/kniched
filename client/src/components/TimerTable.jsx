@@ -5,27 +5,11 @@ import React, { useEffect, useState } from 'react'
 import { formatTimer } from './Timer'
 
 function TimerTable (props) {
-  const {projectId} = props
-  const [timers, setTimers] = useState([])
+  const { timers, deleteTimer } = props
   const [anchorEl, setAnchorEl] = useState(null)
 
-  useEffect(()=>{
-    fetch(`/projects/${projectId}/timers`).then(r=>{
-      if (r.ok) r.json().then(setTimers)
-      else r.json().then(console.log)
-    })
-  }, [projectId])
-
-  function deleteTimer (timerId) {
-    fetch(`/timers/${timerId}`, {
-      method: 'DELETE'
-    }).then(r=>{
-      if (r.ok) {
-        setAnchorEl(null)
-        const list = timers.filter(timer => timer.id !== timerId)
-        setTimers(list)
-      }
-    })
+  function removeTimer (timerId) {
+    deleteTimer(timerId).then(handleClosePopover)
   }
 
   function handleClosePopover () {
@@ -88,7 +72,7 @@ function TimerTable (props) {
                 </IconButton>
                 <IconButton
                   size='small'
-                  onClick={(e)=>deleteTimer(anchorEl.name)}
+                  onClick={(e)=>removeTimer(anchorEl.name)}
                   >
                     <DeleteIcon fontSize='inherit' />
                 </IconButton>

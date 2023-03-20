@@ -1,8 +1,9 @@
-import { Button, Container, Grid, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
+import { Button, Container, Grid, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import ProjectMetaTable from '../components/ProjectMetaTable'
 import Timer from '../components/Timer'
+import TimerContainer from '../components/TimerContainer'
 import TimerTable from '../components/TimerTable'
 
 function ProjectSummaryPage () {
@@ -34,10 +35,7 @@ function ProjectSummaryPage () {
           <ProjectMetaTable project={project} />
         </Grid>
         <Grid item xs={6}>
-          <Container>
-            <Timer />
-          </Container>
-          <TimerTable projectId={project.id} />
+          <TimerContainer project={project} />
         </Grid>
       </Grid>
     </React.Fragment>

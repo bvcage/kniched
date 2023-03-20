@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
 function Timer (props) {
+  const { saveTimer } = props
   const location = useLocation()
   const [isRunning, setIsRunning] = useState(false)
   const [isPaused, setIsPaused] = useState(true)
@@ -41,20 +42,11 @@ function Timer (props) {
         'concluded': new Date().toString(),
         'project_id': parseInt(location.pathname.split('/').pop())
       }
-      fetch('/timers', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(postObj)
-      }).then(r=>{
-        if (r.ok) r.json().then(dbObj => {
-          console.log(dbObj)
-          setTimer(0)
-          setBegan(null)
-        })
-        else r.json().then(console.log)
+      saveTimer(postObj).then(r=>{
+        setTimer(0)
+        setBegan(null)
       })
+      
     }
   }
 
