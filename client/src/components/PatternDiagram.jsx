@@ -10,7 +10,7 @@ function PatternDiagram (props) {
       if (r.ok) r.json().then(setDiagram)
       else r.json().then(console.log)
     })
-  }, [])
+  }, [id])
 
   const max_cols = !!diagram[0] ? diagram[0].max_cols : 0
   const num_rows = !!diagram[0] ? parseInt(diagram[0].num_rows) : 0

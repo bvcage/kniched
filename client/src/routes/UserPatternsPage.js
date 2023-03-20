@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button, Card, CardContent, Grid, Typography } from '@mui/material'
-import PatternFilter from '../components/PatternFilter'
+import { Card, CardContent, Grid, Typography } from '@mui/material'
+// import PatternFilter from '../components/PatternFilter'
 import CreatePatternBtn from '../components/CreatePatternBtn'
 
 function UserPatternsPage () {

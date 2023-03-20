@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
+import { Table, TableBody, TableCell, TableRow } from '@mui/material'
 
 function ProjectMetaTable (props) {
   const { project } = props
@@ -14,7 +14,6 @@ function ProjectMetaTable (props) {
   if (!project) return <></>
 
   const displayOptions = ['start date', 'end date', 'status', 'pattern']
-  console.log(project)
   const display = Object.entries(project)
     .map(([k,v]) => {
       switch (k) {

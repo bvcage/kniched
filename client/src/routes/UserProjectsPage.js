@@ -24,7 +24,7 @@ function UserProjectsPage () {
     fetch('/statuses').then(r=>{
       if (r.ok) r.json().then(setStatusList)
     })
-  }, [])
+  }, [user])
 
   const ProjectCards = !!projects ? projects.map(project => {
     const status = !!project.status ? statusList[project.status] : statusList.find(s => s.code === 999)

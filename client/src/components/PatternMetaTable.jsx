@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
+import { Link, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material'
 
 function PatternMetaTable (props) {
   const { pattern } = props

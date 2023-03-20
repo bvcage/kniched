@@ -10,7 +10,7 @@ function UserDashboard () {
     fetch(`users/${user.id}/projects?status=2`).then(r=>{
       if (r.ok) r.json().then(setInProgressProjects)
     })
-  }, [])
+  }, [user])
 
   return (
     <Grid container spacing={2}>

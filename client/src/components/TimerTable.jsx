@@ -3,7 +3,7 @@ import AddIcon from '@mui/icons-material/Add'
 import CloseIcon from '@mui/icons-material/Close'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { formatTimer } from './Timer'
 
 function TimerTable (props) {

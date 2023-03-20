@@ -38,7 +38,7 @@ function Header () {
       <Breadcrumbs>
         {location.pathname.split('/').map((loc, i, ary) => {
           return (
-            <Link underline='hover' href={ary.slice(0,i+1).join('/')}>{loc}</Link>
+            <Link key={loc} underline='hover' href={ary.slice(0,i+1).join('/')}>{loc}</Link>
           )
         })}
       </Breadcrumbs>
@@ -72,7 +72,7 @@ function Header () {
   // }
 
   return (
-    <Grid container fluid sx={{borderBottom: 1}}>
+    <Grid container fluid='true' sx={{borderBottom: 1}}>
 
       {/* left side */}
       <Grid item xs={4}>

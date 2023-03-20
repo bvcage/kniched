@@ -1,8 +1,8 @@
-import { Button, Grid, Stack, Typography } from '@mui/material'
+import { Button, Grid, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import CreateProjectBtn from '../components/CreateProjectBtn'
-import PatternDiagram from '../components/PatternDiagram'
+// import PatternDiagram from '../components/PatternDiagram'
 import PatternMetaTable from '../components/PatternMetaTable'
 
 function PatternSummaryPage () {
