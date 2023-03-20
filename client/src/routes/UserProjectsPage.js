@@ -8,8 +8,6 @@ import Typography from '@mui/material/Typography'
 
 import CreateProjectBtn from '../components/CreateProjectBtn'
 
-const STATUS = ['', 'to-do', 'in progress', 'complete']
-
 function UserProjectsPage () {
   const user = JSON.parse(localStorage.getItem('user'))
   const [projects, setProjects] = useState([])

@@ -1,14 +1,17 @@
 import { Container } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Timer from './Timer'
+import TimerCreateModal from './TimerCreateModal'
 import TimerEditModal from './TimerEditModal'
 import TimerTable from './TimerTable'
 
 function TimerContainer (props) {
   const { project } = props
   const [timers, setTimers] = useState([])
-  const [openModal, setOpenModal] = useState(false)
-  const closeEditModal = () => setOpenModal(false)
+  const [openCreateModal, setOpenCreateModal] = useState(false)
+  const closeCreateModal = () => setOpenCreateModal(false)
+  const [openEditModal, setOpenEditModal] = useState(false)
+  const closeEditModal = () => setOpenEditModal(false)
   const [timerToEdit, setTimerToEdit] = useState({})
 
   useEffect(()=>{
@@ -17,6 +20,10 @@ function TimerContainer (props) {
       else r.json().then(console.log)
     })
   }, [project])
+
+  function createTimer () {
+    setOpenCreateModal(true)
+  }
 
   async function deleteTimer (timerId) {
     timerId = parseInt(timerId)
@@ -32,7 +39,7 @@ function TimerContainer (props) {
 
   function editTimer (timerId) {
     setTimerToEdit(timers.find(t => t.id === parseInt(timerId)))
-    setOpenModal(true)
+    setOpenEditModal(true)
   }
 
   async function saveTimer (obj, timerId = null) {
@@ -73,6 +80,7 @@ function TimerContainer (props) {
     <Container>
       <Timer saveTimer={saveTimer} />
       <TimerTable
+        createTimer={createTimer}
         deleteTimer={deleteTimer}
         editTimer={editTimer}
         formatTimerISO={formatTimerISO}
@@ -81,9 +89,15 @@ function TimerContainer (props) {
       <TimerEditModal
         closeModal={closeEditModal}
         formatTimerISO={formatTimerISO}
-        open={openModal}
+        open={openEditModal}
         saveTimer={saveTimer}
         timer={timerToEdit}
+      />
+      <TimerCreateModal
+        closeModal={closeCreateModal}
+        open={openCreateModal}
+        formatTimerISO={formatTimerISO}
+        saveTimer={saveTimer}
       />
     </Container>
   )

@@ -1,4 +1,5 @@
-import { Box, IconButton, Popover, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
+import { Box, Button, Container, IconButton, Popover, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add'
 import CloseIcon from '@mui/icons-material/Close'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
@@ -6,7 +7,7 @@ import React, { useEffect, useState } from 'react'
 import { formatTimer } from './Timer'
 
 function TimerTable (props) {
-  const { timers, deleteTimer, editTimer } = props
+  const { timers, createTimer, deleteTimer, editTimer } = props
   const [anchorEl, setAnchorEl] = useState(null)
 
   function removeTimer (timerId) {
@@ -15,6 +16,11 @@ function TimerTable (props) {
 
   function handleClosePopover () {
     setAnchorEl(null)
+  }
+
+  function openCreateModal () {
+    createTimer()
+    handleClosePopover()
   }
 
   function openEditModal (timerId) {
@@ -39,7 +45,15 @@ function TimerTable (props) {
       })
     : null
 
-  if (!timers[0]) return <></>
+  if (!timers[0]) return (
+    <Container sx={{textAlign: 'center'}}>
+      <Button
+        onClick={openCreateModal}
+        >
+          manual entry
+      </Button>
+    </Container>
+  )
   return (
     <TableContainer>
       <Table size='small' sx={{maxWidth: 'fit-content', margin: 'auto'}}>
@@ -53,7 +67,11 @@ function TimerTable (props) {
         <TableBody>
           {tableRows}
           <TableRow>
-            <TableCell sx={{borderBottom: 'none'}} />
+            <TableCell sx={{borderBottom: 'none', textAlign: 'center'}}>
+              <IconButton size='small' onClick={openCreateModal}>
+                <AddIcon fontSize='inherit' />
+              </IconButton>
+            </TableCell>
             <TableCell
               align='right'
               sx={{
@@ -63,7 +81,7 @@ function TimerTable (props) {
               >{formatTimer(timers.reduce((acc, obj) => acc + obj.duration, 0))}
             </TableCell>
           </TableRow>
-          {/* delete timer confirmation */}
+          {/* timer edit options */}
           <Popover
             open={!!anchorEl}
             anchorEl={anchorEl}
