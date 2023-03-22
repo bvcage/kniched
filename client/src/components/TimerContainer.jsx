@@ -1,5 +1,6 @@
 import { Container } from '@mui/material'
 import React, { useEffect, useState } from 'react'
+import DeleteModal from './DeleteModal'
 import Timer from './Timer'
 import TimerCreateModal from './TimerCreateModal'
 import TimerEditModal from './TimerEditModal'
@@ -10,9 +11,12 @@ function TimerContainer (props) {
   const [timers, setTimers] = useState([])
   const [openCreateModal, setOpenCreateModal] = useState(false)
   const closeCreateModal = () => setOpenCreateModal(false)
+  const [openDeleteModal, setOpenDeleteModal] = useState(false)
+  const closeDeleteModal = () => setOpenDeleteModal(false)
   const [openEditModal, setOpenEditModal] = useState(false)
   const closeEditModal = () => setOpenEditModal(false)
   const [timerToEdit, setTimerToEdit] = useState({})
+  const [selectedTimer, setSelectedTimer] = useState({})
 
   useEffect(()=>{
     fetch(`/projects/${project.id}/timers`).then(r=>{
@@ -25,8 +29,16 @@ function TimerContainer (props) {
     setOpenCreateModal(true)
   }
 
-  async function deleteTimer (timerId) {
+  function confirmDeleteTimer (timerId) {
     timerId = parseInt(timerId)
+    let temp = timers.find(t=>t.id === timerId)
+    if (!temp) return
+    setSelectedTimer(temp)
+    setOpenDeleteModal(true)
+  }
+
+  async function deleteTimer (timer) {
+    const timerId = parseInt(timer.id)
     return fetch(`/timers/${timerId}`, {
       method: 'DELETE'
     }).then(r=>{
@@ -81,7 +93,7 @@ function TimerContainer (props) {
       <Timer saveTimer={saveTimer} />
       <TimerTable
         createTimer={createTimer}
-        deleteTimer={deleteTimer}
+        deleteTimer={confirmDeleteTimer}
         editTimer={editTimer}
         formatTimerISO={formatTimerISO}
         timers={timers}
@@ -99,6 +111,13 @@ function TimerContainer (props) {
         formatTimerISO={formatTimerISO}
         saveTimer={saveTimer}
       />
+      <DeleteModal
+        closeModal={closeDeleteModal}
+        delFunc={deleteTimer}
+        delObj={selectedTimer}
+        open={openDeleteModal}
+        prompt={`Are you sure you want to delete timer for ${formatTimerReading(selectedTimer.duration)} from ${new Date(selectedTimer.began).toDateString()}? This cannot be undone.`}
+      />
     </Container>
   )
 }
@@ -112,6 +131,21 @@ function formatTimerISO (numSeconds) {
   const minutes = time.getUTCMinutes()
   const seconds = time.getUTCSeconds()
   return `P${years}Y${months}M${days}DT${hours}H${minutes}M${seconds}S`
+}
+
+function formatTimerReading (numSeconds) {
+  const time = new Date(numSeconds * 1000)
+  // const years = time.getUTCFullYear() - 1970
+  // const months = time.getUTCMonth()
+  // const days = time.getUTCDate() - 1
+  const hours = time.getUTCHours()
+  const minutes = time.getUTCMinutes()
+  const seconds = time.getUTCSeconds()
+  let val = []
+  if (!!hours) val.push(`${hours}\u00A0hour${hours !== 1 ? 's' : ''}`)
+  if (!!minutes) val.push(`${minutes}\u00A0minute${minutes !== 1 ? 's' : ''}`)
+  if (!!seconds) val.push(`${seconds}\u00A0second${seconds !== 1 ? 's' : ''}`)
+  return val.join(', ')
 }
 
 export default TimerContainer
