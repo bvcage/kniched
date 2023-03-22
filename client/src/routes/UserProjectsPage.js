@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Grid from '@mui/material/Grid'
+import Skeleton from '@mui/material/Skeleton'
 import Typography from '@mui/material/Typography'
 
 import CreateProjectBtn from '../components/CreateProjectBtn'
-import { Skeleton } from '@mui/material'
 
 function UserProjectsPage () {
   const user = JSON.parse(localStorage.getItem('user'))
@@ -28,7 +28,7 @@ function UserProjectsPage () {
   }, [])
 
   const ProjectCards = !!projects ? projects.map((project, idx) => {
-    const status = !!project.status ? statusList[project.status] : statusList.find(s => s.code === 999)
+    const status = !!project.status ? statusList.find(s=>s.id === parseInt(project.status)) : statusList.find(s => s.code === 999)
     if (!status) {
       return (
         <Grid item
