@@ -1,5 +1,6 @@
 import { Box, Button, Grid, Modal, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
+import { MODAL_STYLE } from './ModalStyle'
 
 function TimerEditModal (props) {
   const { open, closeModal, timer, formatTimerISO, saveTimer } = props
@@ -14,18 +15,6 @@ function TimerEditModal (props) {
       seconds: duration.getUTCSeconds()
     })
   }, [timer])
-
-  const modalStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: '1rem',
-  }
 
   function evalTimeEntry () {
     Object.entries(edits).forEach(([k,v]) => {
@@ -108,7 +97,7 @@ function TimerEditModal (props) {
       >
         <Box
           component='form'
-          sx={modalStyle}
+          sx={MODAL_STYLE}
           onSubmit={saveEdits}
           >
             <Grid

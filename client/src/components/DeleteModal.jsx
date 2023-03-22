@@ -1,17 +1,6 @@
 import { Box, Button, Grid, Modal, Typography } from '@mui/material'
 import React from 'react'
-
-const modalStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
-  borderRadius: '1rem',
-}
+import { MODAL_STYLE } from './ModalStyle'
 
 function DeleteModal (props) {
   const {
@@ -22,8 +11,6 @@ function DeleteModal (props) {
     prompt,
   } = props
 
-  console.log(delObj)
-
   if (!props.delObj) return <></>
   return (
     <Modal
@@ -31,7 +18,7 @@ function DeleteModal (props) {
       onClose={closeModal}
       >
         <Box
-          sx={modalStyle}
+          sx={MODAL_STYLE}
           >
             <Grid container spacing={1}>
               <Grid item xs={12}>

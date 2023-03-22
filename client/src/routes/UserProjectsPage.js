@@ -7,6 +7,7 @@ import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 
 import CreateProjectBtn from '../components/CreateProjectBtn'
+import { Skeleton } from '@mui/material'
 
 function UserProjectsPage () {
   const user = JSON.parse(localStorage.getItem('user'))
@@ -24,10 +25,25 @@ function UserProjectsPage () {
     fetch('/statuses').then(r=>{
       if (r.ok) r.json().then(setStatusList)
     })
-  }, [user])
+  }, [])
 
-  const ProjectCards = !!projects ? projects.map(project => {
+  const ProjectCards = !!projects ? projects.map((project, idx) => {
     const status = !!project.status ? statusList[project.status] : statusList.find(s => s.code === 999)
+    if (!status) {
+      return (
+        <Grid item
+          key={idx}
+          xs={12} sm={6} md={4} xl={3}
+          >
+            <Card>
+              <CardContent>
+                <Skeleton variant='text' sx={{fontSize: '2rem'}} />
+                <Skeleton variant='text' sx={{fontSize: '1rem'}} />
+              </CardContent>
+            </Card>
+        </Grid>
+      )
+    }
     return (
       <Grid item
         key={project.id}
