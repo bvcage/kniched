@@ -53,10 +53,9 @@ function PatternMetaTable (props) {
           <TableCell />
         </TableHead> */}
         <TableBody>
-          {display.map(entry => {
-            console.log(entry)
+          {display.map((entry,idx) => {
             return (
-              <TableRow>
+              <TableRow key={'pattern'+idx}>
                 <TableCell>{entry[0]}</TableCell>
                 <TableCell>
                   {

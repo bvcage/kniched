@@ -8,7 +8,7 @@ function UserProjectContainer (props) {
   const width = view === 'grid' ? 3 : 12
   const items = projects[0]
     ? projects.map(proj => (
-      <Grid item xs={width}>
+      <Grid item xs={width} key={proj.id}>
         <Link href={`${user.username}/projects/${proj.id}`}>
           <Typography variant='body1'>{proj.name}</Typography>
         </Link>

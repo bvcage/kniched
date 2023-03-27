@@ -27,38 +27,40 @@ function UserProjectsPage () {
     })
   }, [])
 
-  const ProjectCards = !!projects ? projects.map((project, idx) => {
-    const status = !!project.status ? statusList.find(s=>s.id === parseInt(project.status)) : statusList.find(s => s.code === 999)
-    if (!status) {
+  const ProjectCards = !!projects
+    ? projects.map((project, idx) => {
+      const status = !!project.status ? project.status : statusList.find(s => s.code === 999)
+      if (!status) {
+        return (
+          <Grid item
+            key={idx}
+            xs={12} sm={6} md={4} xl={3}
+            >
+              <Card>
+                <CardContent>
+                  <Skeleton variant='text' sx={{fontSize: '2rem'}} />
+                  <Skeleton variant='text' sx={{fontSize: '1rem'}} />
+                </CardContent>
+              </Card>
+          </Grid>
+        )
+      }
       return (
         <Grid item
-          key={idx}
+          key={project.id}
           xs={12} sm={6} md={4} xl={3}
           >
-            <Card>
-              <CardContent>
-                <Skeleton variant='text' sx={{fontSize: '2rem'}} />
-                <Skeleton variant='text' sx={{fontSize: '1rem'}} />
-              </CardContent>
+            <Card
+              onClick={()=>navigate(`${project.id}`)}
+              >
+                <CardContent>
+                  <Typography variant='h6'>{project.name}</Typography>
+                  <Typography variant='subtitle1'>{status.title}</Typography>
+                </CardContent>
             </Card>
         </Grid>
-      )
-    }
-    return (
-      <Grid item
-        key={project.id}
-        xs={12} sm={6} md={4} xl={3}
-        >
-          <Card
-            onClick={()=>navigate(`${project.id}`)}
-            >
-              <CardContent>
-                <Typography variant='h6'>{project.name}</Typography>
-                <Typography variant='subtitle1'>{status.title}</Typography>
-              </CardContent>
-          </Card>
-      </Grid>
-    )}): null
+      )})
+    : null
 
   return (
     <div>
