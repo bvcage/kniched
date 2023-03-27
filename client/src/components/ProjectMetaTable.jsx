@@ -1,11 +1,13 @@
 import React from 'react'
-import { Table, TableBody, TableCell, TableRow } from '@mui/material'
+import { Link, Table, TableBody, TableCell, TableRow } from '@mui/material'
 
 function ProjectMetaTable (props) {
   const { project } = props
 
   if (!project) return <></>
+  console.log(project)
 
+  // select display items & alter display titles if needed (e.g., remove underscores)
   const displayOptions = ['start date', 'end date', 'status', 'pattern']
   const display = Object.entries(project)
     .map(([k,v]) => {
@@ -22,6 +24,18 @@ function ProjectMetaTable (props) {
       }
     })
     .filter(([k,v]) => displayOptions.includes(k))
+  
+  // format how values display in table
+  function formatDisplayValue(k,v) {
+    switch (k) {
+      case 'pattern':
+        return (
+          <Link href={'/patterns/'+v.id}>{v.name}</Link>
+        )
+      default:
+        return v
+    }
+  }
 
   return (
     <Table>
@@ -36,7 +50,9 @@ function ProjectMetaTable (props) {
           return (
             <TableRow key={k}>
               <TableCell>{k}</TableCell>
-              <TableCell>{v}</TableCell>
+              <TableCell>
+                {formatDisplayValue(k,v)}
+              </TableCell>
             </TableRow>
           )
         })}
