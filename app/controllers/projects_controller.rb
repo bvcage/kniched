@@ -39,6 +39,13 @@ class ProjectsController < ApplicationController
     render json: project, status: :accepted
   end
 
+  # CUSTOM ROUTES
+
+  def filters
+    filters = Project.gen_filters
+    render json: filters, status: :ok
+  end
+
   private
 
   def update_params

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Grid } from '@mui/material'
 import PatternCard from '../components/PatternCard'
-import PatternFilter from '../components/PatternFilter'
+import FilterStack from '../components/FilterStack'
 
 function ExplorePage () {
   const [order, setOrder] = useState([])
@@ -42,7 +42,7 @@ function ExplorePage () {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <PatternFilter filters={filters} appliedFilters={appliedFilters} setAppliedFilters={setAppliedFilters} />
+        <FilterStack filters={filters} appliedFilters={appliedFilters} setAppliedFilters={setAppliedFilters} />
       </Grid>
       {patterns
         .filter(pattern => {

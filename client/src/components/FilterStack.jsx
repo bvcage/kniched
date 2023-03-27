@@ -2,8 +2,8 @@ import { Button, Stack, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/
 import Check from '@mui/icons-material/Check'
 import React, { useState } from 'react'
 
-function PatternFilter (props) {
-  const { filters, appliedFilters, setAppliedFilters } = props
+function FilterStack (props) {
+  const { filters, appliedFilters, setAppliedFilters, justify = 'center' } = props
   const [open, setOpen] = useState('')
   const [anchor, setAnchor] = useState(null)
 
@@ -39,7 +39,7 @@ function PatternFilter (props) {
 
   if (!filters) return <></>
   return (
-    <Stack direction='row' spacing={2} justifyContent='center'>
+    <Stack direction='row' spacing={2} justifyContent={justify}>
       {Object.entries(filters).map(([k,v]) => {
         return (
           <React.Fragment key={k}>
@@ -87,4 +87,4 @@ function PatternFilter (props) {
   )
 }
 
-export default PatternFilter
+export default FilterStack

@@ -3,4 +3,11 @@ class Project < ApplicationRecord
   belongs_to :user
   belongs_to :status
   has_many :timers
+
+  def self.gen_filters
+    {
+      :status => Status.all.pluck(:title).uniq
+    }
+  end
+
 end

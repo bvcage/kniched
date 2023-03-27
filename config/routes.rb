@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   post 'signup', to: 'users#create'
   get 'patterns/explore', to: "patterns#explore"
   get 'patterns/filters', to: "patterns#filters"
+  get 'projects/filters', to: "projects#filters"
 
   # default routes
   resources :crafts, only: [:index]
