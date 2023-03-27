@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   resources :patterns, only: [:index, :show, :create] do
     get "/diagram", to: "patterns#diagram"
   end
-  resources :projects, only: [:show] do
+  resources :projects, only: [:show, :update] do
     resources :timers, only: [:index]
   end
   resources :statuses, only: [:index]

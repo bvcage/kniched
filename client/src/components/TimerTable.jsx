@@ -11,7 +11,8 @@ function TimerTable (props) {
   const [anchorEl, setAnchorEl] = useState(null)
 
   function removeTimer (timerId) {
-    deleteTimer(timerId).then(handleClosePopover)
+    handleClosePopover()
+    deleteTimer(timerId)
   }
 
   function handleClosePopover () {

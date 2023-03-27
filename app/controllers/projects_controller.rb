@@ -20,7 +20,6 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    pp params
     project = Project.create!({
       name: params[:name],
       start_date: params[:start],
@@ -34,6 +33,23 @@ class ProjectsController < ApplicationController
       project.update(status: 1)
     end
     render json: project, status: :created
+  end
+
+  def update
+    project = Project.find_by!(id: params[:id])
+    project.update!(update_params)
+    render json: project, status: :accepted
+  end
+
+  private
+
+  def update_params
+    params.permit(
+      :name,
+      :status_id,
+      :start_date,
+      :end_date
+    )
   end
 
 end
