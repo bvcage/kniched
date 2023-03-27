@@ -10,4 +10,11 @@ class Project < ApplicationRecord
     }
   end
 
+  def self.gen_sort_options
+    [
+      'name',
+      'status'
+    ]
+  end
+
 end

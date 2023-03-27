@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get 'patterns/explore', to: "patterns#explore"
   get 'patterns/filters', to: "patterns#filters"
   get 'projects/filters', to: "projects#filters"
+  get 'projects/sorting', to: "projects#sort_options"
 
   # default routes
   resources :crafts, only: [:index]

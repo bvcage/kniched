@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography'
 
 import CreateProjectBtn from '../components/CreateProjectBtn'
 import FilterStack from '../components/FilterStack'
+import SortMenu from '../components/SortMenu'
 
 function UserProjectsPage () {
   const user = JSON.parse(localStorage.getItem('user'))
@@ -16,6 +17,9 @@ function UserProjectsPage () {
   const [statusList, setStatusList] = useState([])
   const [filters, setFilters] = useState({})
   const [appliedFilters, setAppliedFilters] = useState({})
+  const [sortOptions, setSortOptions] = useState([])
+  const [selSort, setSelSort] = useState('')
+  const [selSortDir, setSelSortDir] = useState('')
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -31,7 +35,32 @@ function UserProjectsPage () {
     fetch('/projects/filters').then(r=>{
       if (r.ok) r.json().then(setFilters)
     })
+    fetch('/projects/sorting').then(r=>{
+      if (r.ok) r.json().then(setSortOptions)
+    })
   }, [])
+
+  function sortProjects (a,b) {
+    if (!selSort || !selSortDir) return 0
+    const after = selSortDir === 'asc' ? 1 : -1
+    const before = selSortDir === 'asc' ? -1 : 1
+    let aVal, bVal
+    switch (selSort) {
+      case 'name':
+        aVal = a[selSort].toUpperCase()
+        bVal = b[selSort].toUpperCase()
+        break
+      case 'status':
+        aVal = a[selSort].code
+        bVal = b[selSort].code
+        break
+      default:
+        aVal = a[selSort]
+        bVal = b[selSort]
+    }
+    if (aVal < bVal) return before
+    if (aVal > bVal) return after
+  }
 
   const ProjectCards = !!projects
     ? projects
@@ -52,6 +81,7 @@ function UserProjectsPage () {
           })
           return results.every(Boolean)
         })
+        .sort(sortProjects)
         .map((project, idx) => {
           const status = !!project.status ? project.status : statusList.find(s => s.code === 999)
           if (!status) {
@@ -93,11 +123,18 @@ function UserProjectsPage () {
         <Grid item xs={12}>
           <Typography variant='h3'>projects</Typography>
         </Grid>
-        <Grid item xs={4}>
-          <CreateProjectBtn />
-        </Grid>
-        <Grid item xs={8}>
-          <FilterStack filters={filters} appliedFilters={appliedFilters} setAppliedFilters={setAppliedFilters} justify='right' />
+        <Grid item xs={12}>
+          <Grid container spacing={1}>
+            <Grid item xs={4}>
+              <CreateProjectBtn />
+            </Grid>
+            <Grid item xs={7}>
+              <FilterStack filters={filters} appliedFilters={appliedFilters} setAppliedFilters={setAppliedFilters} justify='right' />
+            </Grid>
+            <Grid item xs={1}>
+              <SortMenu options={sortOptions} selSort={selSort} selSortDir={selSortDir} setSelSort={setSelSort} setSelSortDir={setSelSortDir} />
+            </Grid>
+          </Grid>
         </Grid>
         <Grid item xs={12}>
           <Grid container spacing={3}>

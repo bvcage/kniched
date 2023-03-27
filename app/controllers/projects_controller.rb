@@ -46,6 +46,10 @@ class ProjectsController < ApplicationController
     render json: filters, status: :ok
   end
 
+  def sort_options
+    render json: Project.gen_sort_options, status: :ok
+  end
+
   private
 
   def update_params
