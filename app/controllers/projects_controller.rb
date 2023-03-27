@@ -26,12 +26,10 @@ class ProjectsController < ApplicationController
       end_date: params[:end],
       pattern_id: params[:pattern_id],
       user_id: params[:user_id],
+      status_id: Status.find_by(code: 999).id
     })
-    if (project.start_date <= Date.today)
-      project.update(status: 2)
-    else
-      project.update(status: 1)
-    end
+    status_id = project.start_date && project.start_date <= Date.today ? 2 : 1
+    project.update(status_id: status_id)
     render json: project, status: :created
   end
 
