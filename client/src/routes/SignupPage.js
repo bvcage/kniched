@@ -24,7 +24,7 @@ Object.keys(blankInfo).forEach(item => {
 
 // regex expressions for form validation
 const noSpecialChars = /^[A-Za-z]+[A-Za-z '-]*$/
-const emailFormat = /^[A-Za-z0-9_!#$%&'*+\\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/gm
+const emailFormat = /^[A-Za-z0-9_!#$%&'*+\\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/m
 
 function SignupPage () {
   const [info, setInfo] = useState(blankInfo)
@@ -42,11 +42,13 @@ function SignupPage () {
   function handleSubmit (e) {
     e.preventDefault()
     // validate form
-    Object.entries(info).forEach(([k,v]) => validateField(undefined, k, v))
+    Object.entries(info).forEach(([k,v]) => {
+      validateField(undefined, k, v)
+    })
     if (Object.values(errors).some(item => !!item)) {
       return showAlert(true)
     }
-    // handle user signup
+    // sign up user
     const signup = {...info, password: info.pass1}
     fetch('/signup', {
       method: 'POST',
@@ -78,7 +80,7 @@ function SignupPage () {
     }
 
     if (!val) {
-      return setErrorMessage(field, true)
+      return setErrorMessage(field, 'cannot be empty')
     } else {
       setErrorMessage(field, false)
     }
@@ -87,39 +89,45 @@ function SignupPage () {
       case 'first':
       case 'last':
         if (!noSpecialChars.test(val)) {
-          setErrorMessage(field, 'cannot have special characters')
+          return setErrorMessage(field, 'cannot have special characters')
         } else {
-          setErrorMessage(field, false)
+          return setErrorMessage(field, false)
         }
-        break
       case 'email':
         if (!!val && !emailFormat.test(val)) {
-          setErrorMessage(field, 'must be in valid format (eg, user@email.com)')
+          return setErrorMessage(field, 'must be in valid format (eg, user@email.com)')
         } else {
-          setErrorMessage(field, false)
+          return setErrorMessage(field, false)
         }
-        break
       case 'pass1':
-        // if (!/[A-Z]+/.test(val)) {
-        //   setErrorMessage(field, 'must have an uppercase letter')
-        // }
-        // else if (!/[a-z]+/.test(val)) {
-        //   setErrorMessage(field, 'must have a lowercase letter')
-        // }
-        // else if (!/[0-9]+/.test(val)) {
-        //   setErrorMessage(field, 'must have a number')
-        // }
-        // else if (!/[~!@#$%^&*()=_+{}|;':",.<>/?`[\]]+/.test(val)) {
-        //   setErrorMessage(field, 'must have a special character')
-        // }
-        break
-      case 'pass2':
-        if (!!info.pass1 && info.pass1 !== info.pass2) {
-          setErrorMessage(field, 'passwords do not match')
-        } else {
-          setErrorMessage(field, false)
+        let passwordErrs = []
+        if (!/[A-Z]+/.test(val)) {
+          passwordErrs.push('must have an uppercase letter')
+          // setErrorMessage(field, 'must have an uppercase letter')
         }
-        break
+        if (!/[a-z]+/.test(val)) {
+          passwordErrs.push('must have a lowercase letter')
+          // setErrorMessage(field, 'must have a lowercase letter')
+        }
+        if (!/[0-9]+/.test(val)) {
+          passwordErrs.push('must have a number')
+          // setErrorMessage(field, 'must have a number')
+        }
+        if (!/[~!@#$%^&*()=_+{}|;':",.<>/?`[\]]+/.test(val)) {
+          passwordErrs.push('must have a special character')
+          // setErrorMessage(field, 'must have a special character')
+        }
+        if (passwordErrs.length > 0) {
+          return setErrorMessage(field, <React.Fragment>{passwordErrs.map(err=><>{err}<br/></>)}</React.Fragment>)
+        } else {
+          return setErrorMessage(field, false)
+        }
+      case 'pass2':
+        if (info.pass1 !== info.pass2) {
+          return setErrorMessage(field, 'passwords do not match')
+        } else {
+          return setErrorMessage(field, false)
+        }
       default:
         break
     }
@@ -178,7 +186,7 @@ function SignupPage () {
               type='password'
               value={info.pass1}
               error={!!errors.pass1}
-              helperText={typeof errors.pass1 === 'string' ? errors.pass1 : null}
+              helperText={!!errors.pass1 ? errors.pass1 : null}
               fullWidth
               onBlur={validateField}
               onChange={handleChangeInfo}
