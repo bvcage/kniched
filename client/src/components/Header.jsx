@@ -49,11 +49,11 @@ function Header () {
     return (
       <ButtonGroup>
         <Button
-          onClick={()=>navigate('/signup')}
+          onClick={()=>navigate('/account/signup')}
           >sign up
         </Button>
         <Button
-          onClick={()=>navigate('/login')}
+          onClick={()=>navigate('/account/login')}
           >login
         </Button>
       </ButtonGroup>

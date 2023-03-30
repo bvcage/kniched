@@ -1,24 +1,19 @@
+import { Alert, Box, Button, Container, Grid, Snackbar, TextField } from '@mui/material'
+import { Auth } from 'aws-amplify'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import Alert from '@mui/material/Alert'
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import Container from '@mui/material/Container'
-import Grid from '@mui/material/Grid'
-import Snackbar from '@mui/material/Snackbar'
-import TextField from '@mui/material/TextField'
 
-// blank state objects
-const blankInfo = {
-  first: '',
-  last: '',
+// default values for state objects
+const blankUser = {
   email: '',
   pass1: '',
-  pass2: ''
+  pass2: '',
+  first: '',
+  last: ''
 }
 const noErrors = {}
-Object.keys(blankInfo).forEach(item => {
+Object.keys(blankUser).forEach(item => {
   noErrors[item] = false
 })
 
@@ -26,15 +21,18 @@ Object.keys(blankInfo).forEach(item => {
 const noSpecialChars = /^[A-Za-z]+[A-Za-z '-]*$/
 const emailFormat = /^[A-Za-z0-9_!#$%&'*+\\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/m
 
-function SignupPage () {
-  const [info, setInfo] = useState(blankInfo)
-  const [errors, setErrors] = useState(noErrors)
-  const [alert, showAlert] = useState(false)
+
+// form component to sign up user via AWS
+function SignUpForm (props) {
+  const [ alert, setAlert ] = useState('')
+  const [ errors, setErrors ] = useState(noErrors)
+  const [ user, setUser ] = useState(blankUser)
+
   const navigate = useNavigate()
 
-  function handleChangeInfo (e) {
-    setInfo({
-      ...info,
+  function handleChangeUser (e) {
+    setUser({
+      ...user,
       [e.target.name]: e.target.value
     })
   }
@@ -42,28 +40,26 @@ function SignupPage () {
   function handleSubmit (e) {
     e.preventDefault()
     // validate form
-    Object.entries(info).forEach(([k,v]) => {
+    Object.entries(user).forEach(([k,v]) => {
       validateField(undefined, k, v)
     })
     if (Object.values(errors).some(item => !!item)) {
-      return showAlert(true)
+      return setAlert('could not complete sign up - please review errors')
     }
     // sign up user
-    const signup = {...info, password: info.pass1}
-    fetch('/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(signup)
-    }).then(r=>{
-      if (r.ok) r.json().then(user=>{
-        localStorage.setItem('user', JSON.stringify(user))
-        navigate('/')
-      })
-      else r.json().then(console.log)
+    // AWS
+    Auth.signUp({
+      username: user.email,
+      password: user.pass1,
+      attributes: {
+        email: user.email
+      }
+    }).then(res=>{
+      localStorage.setItem('user', JSON.stringify(res.user.username))
+      navigate('/')
+    }).catch(err=>{
+      setAlert(err.message)
     })
-
   }
 
   function setErrorMessage (field, message) {
@@ -123,7 +119,7 @@ function SignupPage () {
           return setErrorMessage(field, false)
         }
       case 'pass2':
-        if (info.pass1 !== info.pass2) {
+        if (user.pass1 !== user.pass2) {
           return setErrorMessage(field, 'passwords do not match')
         } else {
           return setErrorMessage(field, false)
@@ -143,24 +139,24 @@ function SignupPage () {
             <TextField
               name='first'
               label='first'
-              value={info.first}
+              value={user.first}
               error={!!errors.first}
               helperText={typeof errors.first === 'string' ? errors.first : null}
               fullWidth
               onBlur={validateField}
-              onChange={handleChangeInfo}
+              onChange={handleChangeUser}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
               name='last'
               label='last'
-              value={info.last}
+              value={user.last}
               error={!!errors.last}
               helperText={typeof errors.last === 'string' ? errors.last : null}
               fullWidth
               onBlur={validateField}
-              onChange={handleChangeInfo}
+              onChange={handleChangeUser}
             />
           </Grid>
 
@@ -169,12 +165,12 @@ function SignupPage () {
             <TextField
               name='email'
               label='email'
-              value={info.email}
+              value={user.email}
               error={!!errors.email}
               helperText={typeof errors.email === 'string' ? errors.email : null}
               fullWidth
               onBlur={validateField}
-              onChange={handleChangeInfo}
+              onChange={handleChangeUser}
             />
           </Grid>
 
@@ -184,12 +180,12 @@ function SignupPage () {
               name='pass1'
               label='password'
               type='password'
-              value={info.pass1}
+              value={user.pass1}
               error={!!errors.pass1}
               helperText={!!errors.pass1 ? errors.pass1 : null}
               fullWidth
               onBlur={validateField}
-              onChange={handleChangeInfo}
+              onChange={handleChangeUser}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -197,12 +193,12 @@ function SignupPage () {
               name='pass2'
               label='confirm password'
               type='password'
-              value={info.pass2}
+              value={user.pass2}
               error={!!errors.pass2}
               helperText={typeof errors.pass2 === 'string' ? errors.pass2 : null}
               fullWidth
               onBlur={validateField}
-              onChange={handleChangeInfo}
+              onChange={handleChangeUser}
             />
           </Grid>
 
@@ -223,14 +219,14 @@ function SignupPage () {
         {/* error alert */}
         <Snackbar
           autoHideDuration={3000}
-          open={alert}
-          onClose={()=>showAlert(false)}
+          open={!!alert}
+          onClose={()=>setAlert(null)}
           >
-            <Alert severity='error'>could not complete sign up - please review errors</Alert>
+            <Alert severity='error'>{alert}</Alert>
         </Snackbar>
       </Box>
     </Container>
   )
 }
 
-export default SignupPage
+export default SignUpForm

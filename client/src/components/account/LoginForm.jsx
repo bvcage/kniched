@@ -1,19 +1,16 @@
+import { Alert, Box, Button, Container, Snackbar, Stack, TextField } from '@mui/material'
+import { Auth } from 'aws-amplify'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import Container from '@mui/material/Container'
-import Stack from '@mui/material/Stack'
-import TextField from '@mui/material/TextField'
 
 const blankLogin = {
   email: '',
   password: ''
 }
 
-function LoginPage () {
-  const [login, setLogin] = useState(blankLogin)
+function LoginForm (props) {
+  const [ login, setLogin ] = useState(blankLogin)
+  const [ alert, showAlert ] = useState(null)
   const navigate = useNavigate()
 
   function handleChange (e) {
@@ -25,20 +22,24 @@ function LoginPage () {
 
   function handleSubmit (e) {
     e.preventDefault()
-    fetch('/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(login)
-    }).then(r=>{
-      if (r.ok) r.json().then(user => {
-        localStorage.setItem('user', JSON.stringify(user))
+    // login AWS
+    Auth.signIn(login.email, login.password)
+      .then(user=>{
+        localStorage.setItem('user', JSON.stringify(user.username))
         navigate('/')
       })
-      else r.json().then(console.log)
-    })
-  }
+      .catch(err=>{
+        if (err.code === 'UserNotConfirmedException') {
+          navigate('/account/confirm', {
+            state: {
+              login: login
+            }
+          })
+        } else {
+          showAlert(err.message)
+        }
+      })
+    }
 
   return (
     <Container maxWidth='xs' sx={{padding: '1rem'}}>
@@ -68,9 +69,18 @@ function LoginPage () {
             </Button>
           </Box>
         </Stack>
+
+        {/* error alert */}
+        <Snackbar
+          autoHideDuration={3000}
+          open={!!alert}
+          onClose={()=>showAlert(null)}
+          >
+          <Alert severity='error'>{alert}</Alert>
+        </Snackbar>
       </Box>
     </Container>
   )
 }
 
-export default LoginPage
+export default LoginForm

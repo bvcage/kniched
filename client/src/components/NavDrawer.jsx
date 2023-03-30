@@ -1,3 +1,4 @@
+import { Auth } from 'aws-amplify'
 import React, { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -165,24 +166,32 @@ function NavDrawer () {
 }
 
 async function logoutUser () {
-  const user = JSON.parse(localStorage.getItem('user'))
-  if (!!user) {
-    return await fetch('/logout', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(user)
-    }).then(r=>{
-      if (r.ok) {
-        localStorage.removeItem('user')
-        return true
-      }
-      else r.json().then(err => {return err})
+  return Auth.signOut()
+    .then(()=>{
+      localStorage.removeItem('user')
+      return true
     })
-  } else {
-    return true
-  }
+    .catch(err => {
+      return err.message
+    })
+  // const user = JSON.parse(localStorage.getItem('user'))
+  // if (!!user) {
+  //   return await fetch('/logout', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify(user)
+  //   }).then(r=>{
+  //     if (r.ok) {
+  //       localStorage.removeItem('user')
+  //       return true
+  //     }
+  //     else r.json().then(err => {return err})
+  //   })
+  // } else {
+  //   return true
+  // }
 }
 
 export default NavDrawer

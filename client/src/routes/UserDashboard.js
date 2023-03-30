@@ -7,11 +7,14 @@ function UserDashboard () {
   const user = JSON.parse(localStorage.getItem('user'))
   
   useEffect(() => {
-    fetch(`users/${user.id}/projects?status_id=2`).then(r=>{
-      if (r.ok) r.json().then(setInProgressProjects)
-    })
+    if (!!user && !!user.id) {
+      fetch(`users/${user.id}/projects?status_id=2`).then(r=>{
+        if (r.ok) r.json().then(setInProgressProjects)
+      })
+    }
   }, [])
 
+  if (!user) return <></>
   return (
     <Grid container spacing={2}>
       <Grid item xs={6}>

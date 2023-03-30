@@ -1,20 +1,28 @@
 import React from 'react'
 import {
   createBrowserRouter,
+  Navigate,
   RouterProvider
 } from 'react-router-dom'
 
+// templates
 import RootTemplate from './RootTemplate'
+
+// pages
 import AboutPage from './routes/AboutPage'
+import AccountPage from './routes/AccountPage'
 import ExplorePage from './routes/ExplorePage'
 import LandingPage from './routes/LandingPage'
-import LoginPage from './routes/LoginPage'
 import PatternSummaryPage from './routes/PatternSummaryPage'
 import UserProfilePage from './routes/UserProfilePage'
 import ProjectSummaryPage from './routes/ProjectSummaryPage'
-import SignupPage from './routes/SignupPage'
 import UserPatternsPage from './routes/UserPatternsPage'
 import UserProjectsPage from './routes/UserProjectsPage'
+
+// components
+import LoginForm from './components/account/LoginForm'
+import SignUpForm from './components/account/SignUpForm'
+import ConfirmationForm from './components/account/ConfirmationForm'
 
 const router = createBrowserRouter([
   {
@@ -31,12 +39,26 @@ const router = createBrowserRouter([
         element: <AboutPage />
       },
       {
-        path: 'login',
-        element: <LoginPage />
-      },
-      {
-        path: 'signup',
-        element: <SignupPage />
+        path: 'account',
+        element: <AccountPage />,
+        children: [
+          {
+            index: true,
+            element: <Navigate to='login' replace />
+          },
+          {
+            path: 'login',
+            element: <LoginForm />
+          },
+          {
+            path: 'signup',
+            element: <SignUpForm />
+          },
+          {
+            path: 'confirm',
+            element: <ConfirmationForm />
+          }
+        ]
       },
       {
         path: 'explore',
