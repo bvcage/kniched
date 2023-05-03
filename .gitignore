@@ -31,6 +31,9 @@
 # Ignore DS_Store
 .DS_Store
 
+# Ignore firebase
+.firebase
+
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*

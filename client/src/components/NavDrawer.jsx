@@ -1,6 +1,8 @@
-import { Auth } from 'aws-amplify'
+import { signOut } from 'firebase/auth'
 import React, { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+
+import { AUTH } from '../firebaseConfig'
 
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -166,14 +168,22 @@ function NavDrawer () {
 }
 
 async function logoutUser () {
-  return Auth.signOut()
-    .then(()=>{
+  return signOut(AUTH)
+    .then(() => {
       localStorage.removeItem('user')
       return true
     })
     .catch(err => {
-      return err.message
+      return err.code
     })
+  // return Auth.signOut()
+  //   .then(()=>{
+  //     localStorage.removeItem('user')
+  //     return true
+  //   })
+  //   .catch(err => {
+  //     return err.message
+  //   })
   // const user = JSON.parse(localStorage.getItem('user'))
   // if (!!user) {
   //   return await fetch('/logout', {

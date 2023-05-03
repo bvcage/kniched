@@ -1,7 +1,9 @@
 import { Alert, Box, Button, Container, Grid, Snackbar, TextField } from '@mui/material'
-import { Auth } from 'aws-amplify'
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+
+import { AUTH } from '../../firebaseConfig'
 
 
 // default values for state objects
@@ -47,19 +49,35 @@ function SignUpForm (props) {
       return setAlert('could not complete sign up - please review errors')
     }
     // sign up user
+    createUserWithEmailAndPassword(AUTH, user.email, user.pass1)
+      .then(uCred => {
+        localStorage.setItem('user', JSON.stringify(uCred.user))
+        navigate('/')
+      })
+      .catch(err => {
+        console.log(err.code)
+        switch (err.code) {
+          case 'auth/email-already-in-use':
+            setAlert('account already exists for this email')
+            break
+          default:
+            setAlert('error: ' + err.code)
+            console.log(err)
+        }
+      })
     // AWS
-    Auth.signUp({
-      username: user.email,
-      password: user.pass1,
-      attributes: {
-        email: user.email
-      }
-    }).then(res=>{
-      localStorage.setItem('user', JSON.stringify(res.user.username))
-      navigate('/')
-    }).catch(err=>{
-      setAlert(err.message)
-    })
+    // Auth.signUp({
+    //   username: user.email,
+    //   password: user.pass1,
+    //   attributes: {
+    //     email: user.email
+    //   }
+    // }).then(res=>{
+    //   localStorage.setItem('user', JSON.stringify(res.user.username))
+    //   navigate('/')
+    // }).catch(err=>{
+    //   setAlert(err.message)
+    // })
   }
 
   function setErrorMessage (field, message) {
