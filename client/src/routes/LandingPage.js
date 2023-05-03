@@ -1,22 +1,18 @@
-import { Auth } from 'aws-amplify'
 import React, { useEffect, useState } from 'react'
 import Typography from '@mui/material/Typography'
 import UserDashboard from './UserDashboard'
+
+import { AUTH } from '../firebaseConfig.js'
 
 function LandingPage () {
   const [ user, setUser ] = useState(undefined)
 
   useEffect(() => {
-    Auth.currentAuthenticatedUser().then(user => {
-      if (user === undefined) {
-        setUser(undefined)
-      } else {
-        setUser(user.username)
-      }
-    })
+    if (!!AUTH.currentUser) {
+      setUser(AUTH.currentUser.uid)
+    }
   }, [])
 
-  // const user = JSON.parse(localStorage.getItem('user'))
   return (
     <div>
       {!!user ? <UserDashboard /> : <NoUser />}
