@@ -1,9 +1,10 @@
-import { Alert, Box, Button, Container, Grid, Snackbar, TextField } from '@mui/material'
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
+import { Alert, Box, Button, Container, Grid, Snackbar, TextField, Typography } from '@mui/material'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { doc, setDoc, Timestamp } from 'firebase/firestore'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { AUTH } from '../../firebaseConfig'
+import { AUTH, DB } from '../../firebaseConfig'
 
 
 // default values for state objects
@@ -12,7 +13,8 @@ const blankUser = {
   pass1: '',
   pass2: '',
   first: '',
-  last: ''
+  last: '',
+  username: ''
 }
 const noErrors = {}
 Object.keys(blankUser).forEach(item => {
@@ -48,11 +50,26 @@ function SignUpForm (props) {
     if (Object.values(errors).some(item => !!item)) {
       return setAlert('could not complete sign up - please review errors')
     }
-    // sign up user
+    // authenticate (sign up) user
     createUserWithEmailAndPassword(AUTH, user.email, user.pass1)
       .then(uCred => {
-        localStorage.setItem('user', JSON.stringify(uCred.user))
-        navigate('/')
+        // create user profile
+        const profile = {
+          first: user.first,
+          last: user.last,
+          username: user.username,
+          created_TS: Timestamp.now(),
+          updated_TS: Timestamp.now()
+        }
+        try {
+          setDoc(doc(DB, 'users', uCred.user.uid), profile)
+            .then(ref => {
+              localStorage.setItem('user', JSON.stringify(profile))
+              navigate('/')
+            })
+        } catch (err) {
+          setAlert('error: ' + err.message)
+        }
       })
       .catch(err => {
         console.log(err.code)
@@ -65,19 +82,6 @@ function SignUpForm (props) {
             console.log(err)
         }
       })
-    // AWS
-    // Auth.signUp({
-    //   username: user.email,
-    //   password: user.pass1,
-    //   attributes: {
-    //     email: user.email
-    //   }
-    // }).then(res=>{
-    //   localStorage.setItem('user', JSON.stringify(res.user.username))
-    //   navigate('/')
-    // }).catch(err=>{
-    //   setAlert(err.message)
-    // })
   }
 
   function setErrorMessage (field, message) {
@@ -151,6 +155,23 @@ function SignUpForm (props) {
     <Container maxWidth='sm' sx={{padding: '1rem'}}>
       <Box component='form' onSubmit={handleSubmit}>
         <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Typography variant='h2'>user sign up</Typography>
+          </Grid>
+
+          {/* username */}
+          <Grid item xs={12}>
+            <TextField
+              name='username'
+              label='username'
+              value={user.username}
+              error={!!errors.username}
+              helperText={typeof errors.username === 'string' ? errors.username : null}
+              fullWidth
+              onBlur={validateField}
+              onChange={handleChangeUser}
+            />
+          </Grid>
 
           {/* name */}
           <Grid item xs={12} sm={6}>
