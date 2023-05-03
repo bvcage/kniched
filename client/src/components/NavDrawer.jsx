@@ -1,8 +1,9 @@
 import { signOut } from 'firebase/auth'
-import React, { useState } from 'react'
+import { doc, getDoc } from 'firebase/firestore'
+import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { AUTH } from '../firebaseConfig'
+import { AUTH, DB } from '../firebaseConfig'
 
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -20,9 +21,19 @@ const buttonFont = 'body1'
 
 function NavDrawer () {
   const [open, setOpen] = useState(false)
+  const [uInfo, setUInfo] = useState({})
   const location = useLocation()
   const navigate = useNavigate()
-  const user = JSON.parse(localStorage.getItem('user'))
+
+  const user = AUTH.currentUser
+  useEffect(() => {
+    getDoc(doc(DB, 'users', user.uid))
+      .then(doc => {
+        if (doc.exists()) {
+          setUInfo(doc.data())
+        }
+      })
+  }, [user])
 
   return (
     <React.Fragment>
@@ -110,21 +121,24 @@ function NavDrawer () {
               <List>
                 <ListItem disablePadding>
                   <ListItemButton
-                    onClick={()=>navigate(user.username + '/projects')}
+                    disabled={!uInfo && !uInfo.username}
+                    onClick={()=>navigate(uInfo.username + '/projects')}
                     >
                       <Typography variant={buttonFont}>my projects</Typography>
                   </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
                   <ListItemButton
-                    onClick={()=>navigate(user.username + '/patterns')}
+                    disabled={!uInfo && !uInfo.username}
+                    onClick={()=>navigate(uInfo.username + '/patterns')}
                     >
                       <Typography variant={buttonFont}>my patterns</Typography>
                   </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
                   <ListItemButton
-                    onClick={()=>navigate(user.username)}
+                    disabled={!uInfo && !uInfo.username}
+                    onClick={()=>navigate(uInfo.username)}
                     >
                       <Typography variant={buttonFont}>my profile</Typography>
                   </ListItemButton>
