@@ -5,7 +5,6 @@ function ProjectMetaTable (props) {
   const { project } = props
 
   if (!project) return <></>
-  console.log(project)
 
   // select display items & alter display titles if needed (e.g., remove underscores)
   const displayOptions = ['start date', 'end date', 'status', 'pattern']

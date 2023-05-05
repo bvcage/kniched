@@ -1,6 +1,6 @@
 import { Box, Button, Grid, MenuItem, Modal, Select, Table, TableBody, TableCell, TableRow, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { doc, updateDoc } from 'firebase/firestore'
+import { doc, serverTimestamp, updateDoc } from 'firebase/firestore'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
@@ -11,15 +11,19 @@ import { AUTH, DB } from '../firebaseConfig'
 
 import { MODAL_STYLE } from './ModalStyle'
 import { useNavigate } from 'react-router-dom'
+import AlertSnackbar from './AlertSnackbar'
 
 function ProjectMetaEditModal (props) {
-  const { open, closeModal, project, id } = props
+  const { open, closeModal, project } = props
 
   const user = AUTH.currentUser
 
   const navigate = useNavigate()
   const [statusList, setStatusList] = useState([])
   const [edits, setEdits] = useState(project)
+  const noAlert = {msg: '', severity: ''}
+  const [alert, setAlert] = useState(noAlert)
+  const resetAlert = () => setAlert(noAlert)
   // useEffect(() => {
   //   fetch('/statuses').then(r=>{
   //     if (r.ok) r.json().then(setStatusList)
@@ -51,14 +55,21 @@ function ProjectMetaEditModal (props) {
           return [k,v]
       }
     }))
-    console.log(postObj)
-    updateDoc(doc(DB, 'users', user.uid, 'projects', project.id), postObj)
-      .then(docref => {
-        if (!!docref.id) {
-          closeModal()
-          navigate(0)
-        }
-      })
+    if (Object.keys(postObj).length > 0) {
+      postObj['update_TS'] = serverTimestamp()
+      updateDoc(doc(DB, 'users', user.uid, 'projects', project.id), postObj)
+        .then(docref => {
+          console.log(docref)
+          if (!!docref.id) {
+            closeModal()
+            navigate(0)
+          }
+        })
+    }
+    else {
+      setAlert({msg: 'did not save - no changes made', severity: 'info'})
+      closeModal()
+    }
     // fetch('/projects/'+project.id, {
     //   method: 'PATCH',
     //   headers: {
@@ -116,53 +127,62 @@ function ProjectMetaEditModal (props) {
   }
 
   return (
-    <Modal
-      open={open}
-      onClose={closeModal}
-      >
-        <Box
-          sx={MODAL_STYLE}
-          >
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Typography variant='h6'>edit project info</Typography>
+    <React.Fragment>
+      <Modal
+        open={open}
+        onClose={closeModal}
+        >
+          <Box
+            sx={MODAL_STYLE}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Typography variant='h6'>edit project info</Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Table>
+                    <TableBody>
+                      {Object.entries(edits)
+                        .filter(([k,v]) => editable.includes(k))
+                        .map(([k,v]) => {
+                          return (
+                            <TableRow key={k}>
+                              <TableCell>{k}</TableCell>
+                              <TableCell>
+                                {determineInputType(k,v)}
+                              </TableCell>
+                            </TableRow>
+                          )
+                        })
+                      }
+                    </TableBody>
+                  </Table>
+                </Grid>
+                <Grid item xs={12} sx={{textAlign: 'center'}}>
+                  <Button
+                    variant='outlined'
+                    color='success'
+                    sx={{marginRight: '0.25rem'}}
+                    onClick={saveChanges}
+                    >save
+                  </Button>
+                  <Button
+                    sx={{marginLeft: '0.25rem'}}
+                    onClick={handleClose}
+                    >cancel
+                  </Button>
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <Table>
-                  <TableBody>
-                    {Object.entries(edits)
-                      .filter(([k,v]) => editable.includes(k))
-                      .map(([k,v]) => {
-                        return (
-                          <TableRow key={k}>
-                            <TableCell>{k}</TableCell>
-                            <TableCell>
-                              {determineInputType(k,v)}
-                            </TableCell>
-                          </TableRow>
-                        )
-                      })
-                    }
-                  </TableBody>
-                </Table>
-              </Grid>
-              <Grid item xs={12} sx={{textAlign: 'center'}}>
-                <Button
-                  variant='outlined'
-                  color='success'
-                  sx={{marginRight: '0.25rem'}}
-                  onClick={saveChanges}
-                  >save
-                </Button>
-                <Button
-                  sx={{marginLeft: '0.25rem'}}
-                  onClick={handleClose}
-                  >cancel
-                </Button>
-              </Grid>
-            </Grid>
-        </Box>
-    </Modal>
+          </Box>
+      </Modal>
+      {/* error alert */}
+      <AlertSnackbar 
+        text={alert.msg}
+        severity={alert.severity}
+        closeFn={resetAlert}
+        showAlert={!!alert.msg}
+      />
+    </React.Fragment>
   )
 }
 
