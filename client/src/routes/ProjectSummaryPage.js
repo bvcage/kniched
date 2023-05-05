@@ -6,7 +6,12 @@ import TimerContainer from '../components/TimerContainer'
 import EditIcon from '@mui/icons-material/Edit'
 import ProjectMetaEditModal from '../components/ProjectMetaEditModal'
 
+import { doc, getDoc } from 'firebase/firestore'
+
+import { AUTH, DB } from '../firebaseConfig'
+
 function ProjectSummaryPage () {
+  const user = AUTH.currentUser
   const [project, setProject] = useState({})
   const location = useLocation()
   const navigate = useNavigate()
@@ -16,13 +21,16 @@ function ProjectSummaryPage () {
   const toggleEdit = () => setEditTable(!editTable)
 
   useEffect(() => {
-    fetch('/projects/'+id).then(r=>{
-      if (r.ok) r.json().then(setProject)
-      else r.json().then(console.log)
-    })
-  }, [id])
+    if (!!user && !!user.uid) {
+      getDoc(doc(DB, 'users', user.uid, 'projects', id))
+        .then(docref => {
+          setProject({id: docref.id, ...docref.data()})
+        })
+    }
+  }, [user, id])
 
-  if (!project.id) return <></>
+  console.log(project)
+  if (!project.name) return <></>
   return (
     <React.Fragment>
       <Grid container spacing={1}>

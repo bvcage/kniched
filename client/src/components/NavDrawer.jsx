@@ -27,12 +27,14 @@ function NavDrawer () {
 
   const user = AUTH.currentUser
   useEffect(() => {
-    getDoc(doc(DB, 'users', user.uid))
-      .then(doc => {
-        if (doc.exists()) {
-          setUInfo(doc.data())
-        }
-      })
+    if (!!user && !!user.uid) {
+      getDoc(doc(DB, 'users', user.uid))
+        .then(doc => {
+          if (doc.exists()) {
+            setUInfo(doc.data())
+          }
+        })
+    }
   }, [user])
 
   return (

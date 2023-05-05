@@ -1,25 +1,30 @@
 import { Box, Button, Grid, MenuItem, Modal, Select, Table, TableBody, TableCell, TableRow, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
+import { doc, updateDoc } from 'firebase/firestore'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo'
 import dayjs from 'dayjs'
 
+import { AUTH, DB } from '../firebaseConfig'
+
 import { MODAL_STYLE } from './ModalStyle'
 import { useNavigate } from 'react-router-dom'
 
 function ProjectMetaEditModal (props) {
-  const { open, closeModal, project } = props
+  const { open, closeModal, project, id } = props
+
+  const user = AUTH.currentUser
 
   const navigate = useNavigate()
   const [statusList, setStatusList] = useState([])
   const [edits, setEdits] = useState(project)
-  useEffect(() => {
-    fetch('/statuses').then(r=>{
-      if (r.ok) r.json().then(setStatusList)
-    })
-  }, [])
+  // useEffect(() => {
+  //   fetch('/statuses').then(r=>{
+  //     if (r.ok) r.json().then(setStatusList)
+  //   })
+  // }, [])
 
   const editable = ['name', 'start_date', 'end_date', 'status']
 
@@ -46,18 +51,26 @@ function ProjectMetaEditModal (props) {
           return [k,v]
       }
     }))
-    fetch('/projects/'+project.id, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(postObj)
-    }).then(r=>{
-      if (r.ok) r.json().then(() => {
-        closeModal()
-        navigate(0)
+    console.log(postObj)
+    updateDoc(doc(DB, 'users', user.uid, 'projects', project.id), postObj)
+      .then(docref => {
+        if (!!docref.id) {
+          closeModal()
+          navigate(0)
+        }
       })
-    })
+    // fetch('/projects/'+project.id, {
+    //   method: 'PATCH',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(postObj)
+    // }).then(r=>{
+    //   if (r.ok) r.json().then(() => {
+    //     closeModal()
+    //     navigate(0)
+    //   })
+    // })
   }
 
   function determineInputType(k,v) {

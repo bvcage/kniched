@@ -3,6 +3,7 @@ import { Link, Table, TableBody, TableCell, TableContainer, TableRow } from '@mu
 
 function PatternMetaTable (props) {
   const { pattern } = props
+  console.log(pattern)
   if (!pattern) return <></>
 
   const display = Object.entries(pattern)

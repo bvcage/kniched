@@ -1,6 +1,9 @@
 import { Box, Button, Grid, Input, Modal, Stack, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { addDoc, collection, Timestamp } from 'firebase/firestore'
+
+import { AUTH, DB } from '../firebaseConfig.js'
 
 
 const emptyProject = {
@@ -11,7 +14,7 @@ const emptyProject = {
 
 function CreateProjectBtn (props) {
   const { pattern } = props
-  const user = JSON.parse(localStorage.getItem('user'))
+  const uInfo = JSON.parse(localStorage.getItem('uInfo'))
   const [project, setProject] = useState(emptyProject)
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
@@ -40,21 +43,32 @@ function CreateProjectBtn (props) {
     e.preventDefault()
     handleClose()
     const newProject = {
-      ...project,
+      name: project.name,
       'pattern_id': !!pattern ? pattern.id : null,
+      start_TS: !!project.start ? Timestamp.fromDate(new Date(project.start)) : null,
+      end_TS: !!project.end ? Timestamp.fromDate(new Date(project.end)) : null
     }
-    fetch('/users/'+user.id+'/projects', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(newProject)
-    }).then(r=>{
-      if (r.ok) r.json().then(created => {
-        navigate('/'+user.username+'/projects/'+created.id)
+    addDoc(collection(DB, 'users', AUTH.currentUser.uid, 'projects'), newProject)
+      .then(docref => {
+        if (docref.id) {
+          navigate(`/${uInfo.username}/projects/${docref.id}`)
+        }
       })
-      else r.json().then(console.log)
-    })
+      .catch(err => {
+        console.log(err)
+      })
+    // fetch('/users/'+user.id+'/projects', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(newProject)
+    // }).then(r=>{
+    //   if (r.ok) r.json().then(created => {
+    //     navigate('/'+user.username+'/projects/'+created.id)
+    //   })
+    //   else r.json().then(console.log)
+    // })
   }
 
   return (

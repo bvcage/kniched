@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { collection, getDocs } from 'firebase/firestore'
+import { AUTH, DB } from '../firebaseConfig'
+
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Grid from '@mui/material/Grid'
@@ -12,7 +15,8 @@ import FilterStack from '../components/FilterStack'
 import SortMenu from '../components/SortMenu'
 
 function UserProjectsPage () {
-  const user = JSON.parse(localStorage.getItem('user'))
+  const user = AUTH.currentUser
+  const uInfo = JSON.parse(localStorage.getItem('uInfo'))
   const [projects, setProjects] = useState([])
   const [statusList, setStatusList] = useState([])
   const [filters, setFilters] = useState({})
@@ -23,22 +27,20 @@ function UserProjectsPage () {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!!user) {
-      fetch('/users/' + user.id + '/projects').then(r=>{
-        if (r.ok) r.json().then(projects => setProjects(projects))
-        else r.json().then(console.log)
+    if (!!user && !!user.uid) {
+      getDocs(collection(DB, 'users', user.uid, 'projects')).then(snapshot => {
+        const docs = snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}))
+        setProjects(docs)
+        setSortOptions(['name'])
       })
     }
-    fetch('/statuses').then(r=>{
-      if (r.ok) r.json().then(setStatusList)
-    })
-    fetch('/projects/filters').then(r=>{
-      if (r.ok) r.json().then(setFilters)
-    })
-    fetch('/projects/sorting').then(r=>{
-      if (r.ok) r.json().then(setSortOptions)
-    })
-  }, [])
+    // fetch('/statuses').then(r=>{
+    //   if (r.ok) r.json().then(setStatusList)
+    // })
+    // fetch('/projects/filters').then(r=>{
+    //   if (r.ok) r.json().then(setFilters)
+    // })
+  }, [user])
 
   function sortProjects (a,b) {
     if (!selSort || !selSortDir) return 0
@@ -64,52 +66,52 @@ function UserProjectsPage () {
 
   const ProjectCards = !!projects
     ? projects
-        .filter(project => {
-          const results = Object.entries(appliedFilters).map(([k,v]) => {
-            console.log([k,v])
-            console.log(project[k])
-            if (!v[0]) return true
-            let value = null
-            switch (k) {
-              case 'status':
-                value = project[k].title
-                break
-              default:
-                value = project[k]
-            }
-            return v.indexOf(value) > -1
-          })
-          return results.every(Boolean)
-        })
+        // .filter(project => {
+        //   const results = Object.entries(appliedFilters).map(([k,v]) => {
+        //     console.log([k,v])
+        //     console.log(project[k])
+        //     if (!v[0]) return true
+        //     let value = null
+        //     switch (k) {
+        //       case 'status':
+        //         value = project[k].title
+        //         break
+        //       default:
+        //         value = project[k]
+        //     }
+        //     return v.indexOf(value) > -1
+        //   })
+        //   return results.every(Boolean)
+        // })
         .sort(sortProjects)
         .map((project, idx) => {
-          const status = !!project.status ? project.status : statusList.find(s => s.code === 999)
-          if (!status) {
-            return (
-              <Grid item
-                key={idx}
-                xs={12} sm={6} md={4} xl={3}
-                >
-                  <Card>
-                    <CardContent>
-                      <Skeleton variant='text' sx={{fontSize: '2rem'}} />
-                      <Skeleton variant='text' sx={{fontSize: '1rem'}} />
-                    </CardContent>
-                  </Card>
-              </Grid>
-            )
-          }
+          // const status = !!project.status ? project.status : statusList.find(s => s.code === 999)
+          // if (!status) {
+          //   return (
+          //     <Grid item
+          //       key={idx}
+          //       xs={12} sm={6} md={4} xl={3}
+          //       >
+          //         <Card>
+          //           <CardContent>
+          //             <Skeleton variant='text' sx={{fontSize: '2rem'}} />
+          //             <Skeleton variant='text' sx={{fontSize: '1rem'}} />
+          //           </CardContent>
+          //         </Card>
+          //     </Grid>
+          //   )
+          // }
           return (
             <Grid item
               key={project.id}
               xs={12} sm={6} md={4} xl={3}
               >
                 <Card
-                  onClick={()=>navigate(`${project.id}`)}
+                  onClick={()=>navigate(project.id)}
                   >
                     <CardContent>
                       <Typography variant='h6'>{project.name}</Typography>
-                      <Typography variant='subtitle1'>{status.title}</Typography>
+                      {/* <Typography variant='subtitle1'>{status.title}</Typography> */}
                     </CardContent>
                 </Card>
             </Grid>

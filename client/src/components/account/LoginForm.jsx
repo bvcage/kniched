@@ -1,9 +1,10 @@
 import { Alert, Box, Button, Container, Snackbar, Stack, TextField } from '@mui/material'
 import { signInWithEmailAndPassword } from 'firebase/auth'
+import { doc, getDoc } from 'firebase/firestore'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { AUTH } from '../../firebaseConfig'
+import { AUTH, DB } from '../../firebaseConfig'
 
 const blankLogin = {
   email: '',
@@ -26,31 +27,16 @@ function LoginForm (props) {
     e.preventDefault()
     // login firebase
     signInWithEmailAndPassword(AUTH, login.email, login.password)
-      .then(uCred => {
+      .then(async uCred => {
         localStorage.setItem('user', JSON.stringify(uCred.user))
+        const uInfo = await getDoc(doc(DB, 'users', uCred.user.uid))
+        localStorage.setItem('uInfo', JSON.stringify(uInfo.data()))
         navigate('/')
       })
       .catch(err => {
         console.log(err)
         showAlert('error: ' + err.code)
       })
-    // login AWS
-    // Auth.signIn(login.email, login.password)
-    //   .then(user=>{
-    //     localStorage.setItem('user', JSON.stringify(user.username))
-    //     navigate('/')
-    //   })
-    //   .catch(err=>{
-    //     if (err.code === 'UserNotConfirmedException') {
-    //       navigate('/account/confirm', {
-    //         state: {
-    //           login: login
-    //         }
-    //       })
-    //     } else {
-    //       showAlert(err.message)
-    //     }
-    //   })
     }
 
   return (
