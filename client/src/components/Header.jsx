@@ -1,6 +1,8 @@
 import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
+import { AUTH } from '../firebaseConfig'
+
 import { styled } from '@mui/material/styles'
 import Button from '@mui/material/Button'
 import ButtonGroup from '@mui/material/ButtonGroup'
@@ -31,7 +33,8 @@ const Right = styled(Paper)(({ theme }) => ({
 function Header () {
   const navigate = useNavigate()
   const location = useLocation()
-  const user = JSON.parse(localStorage.getItem('user'))
+  const user = AUTH.currentUser
+  const uInfo = JSON.parse(localStorage.getItem('uInfo'))
 
   const BreadcrumbBar = () => {
     return (
