@@ -99,7 +99,7 @@ function NavDrawer () {
               {/* explore */}
               <List>
                 <ListItem disablePadding>
-                  <ListItemButton
+                  <ListItemButton disabled
                     onClick={()=>navigate('/explore')}
                     >
                       <Typography variant={buttonFont}>explore</Typography>
@@ -131,7 +131,8 @@ function NavDrawer () {
                 </ListItem>
                 <ListItem disablePadding>
                   <ListItemButton
-                    disabled={!uInfo && !uInfo.username}
+                    disabled
+                    // disabled={!uInfo && !uInfo.username}
                     onClick={()=>navigate(uInfo.username + '/patterns')}
                     >
                       <Typography variant={buttonFont}>my patterns</Typography>
