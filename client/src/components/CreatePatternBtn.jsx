@@ -2,6 +2,9 @@ import { Button, Modal, Grid, Typography, Stack, Box, TextField, Select, MenuIte
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { AUTH, DB } from '../firebaseConfig'
+import { addDoc, collection, getDocs } from 'firebase/firestore'
+
 const emptyPattern = {
   name: '',
   url: '',
@@ -10,7 +13,7 @@ const emptyPattern = {
 }
 
 function CreatePatternBtn (props) {
-  const user = JSON.parse(localStorage.getItem('user'))
+  const user = AUTH.currentUser
   const [pattern, setPattern] = useState(emptyPattern)
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
@@ -20,8 +23,9 @@ function CreatePatternBtn (props) {
   // craft options
   const [crafts, setCrafts] = useState([])
   useEffect(() => {
-    fetch('/crafts').then(r=>{
-      if (r.ok) r.json().then(setCrafts)
+    getDocs(collection(DB, 'crafts')).then(snap => {
+      const docs = snap.docs.map(doc => ({id: doc.id, ...doc.data()}))
+      setCrafts(docs)
     })
   }, [])
 
@@ -47,21 +51,27 @@ function CreatePatternBtn (props) {
     e.preventDefault()
     const newPattern = {
       ...pattern,
-      'owner_id': user.id,
-      'craft_id': pattern.craft,
+      'owner_uid': user.uid,
+      'craft_uid': pattern.craft,
     }
-    fetch('/patterns', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(newPattern)
-    }).then(r=>{
-      if (r.ok) r.json().then(created => {
+    delete newPattern.craft
+    addDoc(collection(DB, 'patterns'), newPattern)
+      .then(docref => {
         handleClose()
-        navigate('/patterns/'+created.id)
+        navigate('/patterns/' + docref.id)
       })
-    })
+    // fetch('/patterns', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(newPattern)
+    // }).then(r=>{
+    //   if (r.ok) r.json().then(created => {
+    //     handleClose()
+    //     navigate('/patterns/'+created.id)
+    //   })
+    // })
   }
 
   return (
@@ -98,7 +108,7 @@ function CreatePatternBtn (props) {
                       { crafts[0]
                         ? crafts.map(craft => {
                           return (
-                            <MenuItem value={craft.id}>{craft.name}</MenuItem>
+                            <MenuItem key={craft.id} value={craft.id}>{craft.name}</MenuItem>
                           )
                         })
                         : null

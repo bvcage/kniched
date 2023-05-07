@@ -131,8 +131,7 @@ function NavDrawer () {
                 </ListItem>
                 <ListItem disablePadding>
                   <ListItemButton
-                    disabled
-                    // disabled={!uInfo && !uInfo.username}
+                    disabled={!uInfo && !uInfo.username}
                     onClick={()=>navigate(uInfo.username + '/patterns')}
                     >
                       <Typography variant={buttonFont}>my patterns</Typography>

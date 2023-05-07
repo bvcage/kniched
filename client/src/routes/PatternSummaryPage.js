@@ -1,21 +1,31 @@
 import { Button, Grid, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+
+import { AUTH, DB } from '../firebaseConfig'
+
 import CreateProjectBtn from '../components/CreateProjectBtn'
 // import PatternDiagram from '../components/PatternDiagram'
 import PatternMetaTable from '../components/PatternMetaTable'
+import { doc, getDoc } from 'firebase/firestore'
 
-function PatternSummaryPage () {
+function PatternSummaryPage (props) {
   const location = useLocation()
   const id = location.pathname.split('/').pop()
+  const user = AUTH.currentUser
+  const uInfo = JSON.parse(localStorage.getItem('uInfo'))
   const navigate = useNavigate()
   const [pattern, setPattern] = useState()
 
   useEffect(() => {
-    fetch('/patterns/'+id).then(r=>{
-      if (r.ok) r.json().then(setPattern)
-      else r.json().then(console.log)
-    })
+    if (!!id) {
+      getDoc(doc(DB, 'patterns', id))
+        .then(docref => {
+          const doc = {id: docref.id, ...docref.data()}
+          setPattern(doc)
+        })
+        .catch(err => console.log(err))
+    }
   }, [id])
 
   if (!pattern || !pattern.id) return <></>
